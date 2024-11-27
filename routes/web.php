@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\BranchController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -20,4 +22,12 @@ Route::prefix('admin')->middleware('auth')->group(function(){
 
     // city
     Route::resource('/cities',CityController::class);
+
+    // branch
+    Route::resource('/branches',BranchController::class);
+
+    //Department
+    Route::resource('/departments',DepartmentController::class);
 });
+
+

@@ -3,6 +3,7 @@
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\RankController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +24,8 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::resource('/cities',CityController::class);
 
     Route::resource('/employee',EmployeeController::class);
+
+    Route::resource('/rank',RankController::class);
+
 
 });

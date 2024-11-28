@@ -3,6 +3,7 @@
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DutyController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,9 @@ Route::prefix('admin')->middleware('auth')->group(function(){
 
     //Department
     Route::resource('/departments',DepartmentController::class);
+
+    //duty_time
+    Route::resource('/duties',DutyController::class);
 });
 
 

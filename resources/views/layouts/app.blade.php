@@ -15,8 +15,10 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="gradient-background">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">

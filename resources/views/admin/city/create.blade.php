@@ -18,6 +18,8 @@
                     @enderror
                 </div>
 
+                
+
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary">Create</button>
                 <a href="{{ route('cities.index') }}" class="btn btn-secondary">Back</a>

@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\BranchController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DutyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\RankController;
@@ -23,9 +26,20 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     // city
     Route::resource('/cities',CityController::class);
 
+
+    // branch
+    Route::resource('/branches',BranchController::class);
+
+    //Department
+    Route::resource('/departments',DepartmentController::class);
+
+    //duty_time
+    Route::resource('/duties',DutyController::class);
     Route::resource('/employee',EmployeeController::class);
 
     Route::resource('/rank',RankController::class);
 
 
 });
+
+

@@ -13,7 +13,7 @@
                 <div class="mb-3">
                     <label for="time" class="form-label">Duty Time</label>
                     <input type="time" class="form-control @error('duty') is-invalid @enderror" id="duty"
-                        name="duty" placeholder="Enter Duty" value="{{ old('duty') }}">
+                        name="duty" placeholder="Enter Duty" value="{{ old('duty',$duty->duty) }}">
                     @error('duty')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

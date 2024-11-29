@@ -4,6 +4,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DutyController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeDetailController;
@@ -42,6 +43,7 @@ Route::prefix('admin')->middleware('auth')->group(function(){
 
     Route::resource('/employeedetail',EmployeeDetailController::class);
 
+    Route::resource('/reports',ReportController::class);
 
 });
 

@@ -120,21 +120,56 @@ class EmployeeDetailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        $request->validate(
-            [
-                'name'=> 'required|unique:employee_details,name,' .$id, // Updated table name
-            ]
-        );
-        $employeeDetail = EmployeeDetail::findOrFail($id);
-        $employeeDetail->update([
-            'name' => $request->name,
-            // Add other fields as necessary
-        ]);
+/**
+ * Update the specified resource in storage.
+ */
+public function update($id, Request $request)
+{
+    $request->validate([
+        'branch_id' => 'required|exists:branches,id',
+        'department_id' => 'required|exists:departments,id',
+        'duty_status' => 'required|exists:duties,id',
+        'enroll_date' => 'required|date',
+        'isTraining' => 'required|boolean',
+        'permanent_date' => 'required|date',
+        'emp_photos' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'rank_id' => 'required|exists:ranks,id',
+    ]);
 
-        return redirect()->route('employeedetail.index')->with('success', 'Employee Detail updated successfully.'); // Updated route
+    $employeeDetail = EmployeeDetail::find($id);
+
+    if (!$employeeDetail) {
+        return redirect()->route('employeedetail.index')->with('error', 'Employee not found.');
     }
+
+    $employeeDetail->branch_id = $request->branch_id;
+    $employeeDetail->department_id = $request->department_id;
+    $employeeDetail->duty_time_id = $request->duty_status;
+    $employeeDetail->enroll_date = $request->enroll_date;
+    $employeeDetail->isTraining = $request->isTraining;
+    $employeeDetail->permanent_date = $request->permanent_date;
+    $employeeDetail->rank_id = $request->rank_id;
+
+    // Handle photo upload
+    if ($request->hasFile('emp_photos')) {
+        if ($employeeDetail->emp_photos && file_exists(public_path('images/' . $employeeDetail->emp_photos))) {
+            unlink(public_path('images/' . $employeeDetail->emp_photos));
+        }
+
+        $imgName = time() . '.' . $request->emp_photos->extension();
+        $request->emp_photos->move(public_path('images'), $imgName);
+        $employeeDetail->emp_photos = $imgName;
+    }
+
+    if ($employeeDetail->save()) {
+        return redirect()->route('employeedetail.index')->with('success', 'Employee Detail updated successfully.');
+    } else {
+        return redirect()->back()->with('error', 'Failed to update Employee Detail.');
+    }
+}
+
+
+
 
 
     /**

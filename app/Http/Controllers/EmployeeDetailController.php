@@ -56,13 +56,14 @@ class EmployeeDetailController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'branch_id' => 'required|exists:branches,id',
             'department_id' => 'required|exists:departments,id',
             'duty_status' => 'required|exists:duties,id',
-            'enroll_date' => 'required|date',
+            'enroll_date' => 'required',
             'isTraining' => 'required|boolean',
-            'permanent_date' => 'required|date',
+            'permanent_date' => 'required',
             'emp_photos' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
             'rank_id' => 'required|exists:ranks,id',
         ]);
@@ -71,10 +72,10 @@ class EmployeeDetailController extends Controller
             'branch_id' => $request->branch_id,
             'department_id' => $request->department_id,
             'duty_time_id' => $request->duty_status,
+            'rank_id' => $request->rank_id,
             'enroll_date' => $request->enroll_date,
             'isTraining' => $request->isTraining,
             'permanent_date' => $request->permanent_date,
-            'rank_id' => $request->rank_id,
         ]);
 
         // Check if a photo is uploaded
@@ -161,7 +162,9 @@ public function update($id, Request $request)
         $employeeDetail->emp_photos = $imgName;
     }
 
-    if ($employeeDetail->save()) {
+    $employeeDetail->update();
+
+    if ($employeeDetail->update()) {
         return redirect()->route('employeedetail.index')->with('success', 'Employee Detail updated successfully.');
     } else {
         return redirect()->back()->with('error', 'Failed to update Employee Detail.');

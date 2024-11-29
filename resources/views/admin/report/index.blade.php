@@ -19,38 +19,38 @@
                     </select>
                     
             
-                  <!-- Duty Time Search -->
-<select class="form-select" id="duty_time" name="duty_time">
-    <option value="">Search Duty</option>
-    @foreach ($employeedetaiils as $employeedetail)
-        <option value="{{ $employeedetail->duties->id }}" 
-            {{ request()->input('duty_time') == $employeedetail->duties->id ? 'selected' : '' }}>
-            {{ $employeedetail->duties->duty }}
-        </option>
-    @endforeach
-</select>
+                    <!-- Duty Time Search -->
+                    <select class="form-select" id="duty_time" name="duty_time">
+                        <option value="">Search Duty</option>
+                        @foreach ($employeedetaiils as $employeedetail)
+                            <option value="{{ $employeedetail->duties->id }}" 
+                                {{ request()->input('duty_time') == $employeedetail->duties->id ? 'selected' : '' }}>
+                                {{ $employeedetail->duties->duty }}
+                            </option>
+                        @endforeach
+                    </select>
 
-<!-- Department Search -->
-<select class="form-select" id="department_id" name="department_id">
-    <option value="">Search Department</option>
-    @foreach ($employeedetaiils as $employeedetail)
-        <option value="{{ $employeedetail->department->id }}" 
-            {{ request()->input('department_id') == $employeedetail->department->id ? 'selected' : '' }}>
-            {{ $employeedetail->department->name }}
-        </option>
-    @endforeach
-</select>
+                    <!-- Department Search -->
+                    <select class="form-select" id="department_id" name="department_id">
+                        <option value="">Search Department</option>
+                        @foreach ($employeedetaiils as $employeedetail)
+                            <option value="{{ $employeedetail->department->id }}" 
+                                {{ request()->input('department_id') == $employeedetail->department->id ? 'selected' : '' }}>
+                                {{ $employeedetail->department->name }}
+                            </option>
+                        @endforeach
+                    </select>
 
-<!-- Rank Search -->
-<select class="form-select" id="rank_id" name="rank_id">
-    <option value="">Search Rank</option>
-    @foreach ($employeedetaiils as $employeedetail)
-        <option value="{{ $employeedetail->rank->id }}" 
-            {{ request()->input('rank_id') == $employeedetail->rank->id ? 'selected' : '' }}>
-            {{ $employeedetail->rank->rank }}
-        </option>
-    @endforeach
-</select>
+                    <!-- Rank Search -->
+                    <select class="form-select" id="rank_id" name="rank_id">
+                        <option value="">Search Rank</option>
+                        @foreach ($employeedetaiils as $employeedetail)
+                            <option value="{{ $employeedetail->rank->id }}" 
+                                {{ request()->input('rank_id') == $employeedetail->rank->id ? 'selected' : '' }}>
+                                {{ $employeedetail->rank->rank }}
+                            </option>
+                        @endforeach
+                    </select>
 
             
                     <!-- Search Button -->
@@ -111,6 +111,12 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <!-- Pagination Links -->
+            <div class="mt-3">
+                {{ $employeedetaiils->links() }}
+            </div>
+            
         </div>
     </div>
     {{-- {{ $employeedetaiils->links() }} --}}

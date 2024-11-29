@@ -27,8 +27,8 @@
                         <select class="form-select" id="branch_id" name="branch_id">
                             <option  value="">Select Branch</option>
                             @foreach ($branchs as $branch)
-                                <option value="{{ old('branch_id', $branch->branch_id) }}"
-                                    {{ old('branch_id') == $branch->branch_id ? 'selected' : '' }}>
+                                <option value="{{ $branch->id }}"
+                                    {{ old('branch_id', $employeedetail->branch_id) == $branch->id ? 'selected' : '' }}>
                                     {{ $branch->name }}
                                 </option>
 
@@ -42,8 +42,8 @@
                         <select class="form-select" id="department_id" name="department_id" value=">
                             <option value="">Select Department</option>
                             @foreach ($departments as $department)
-                                <option value="{{ old('department_id', $department->department_id) }}"
-                                    {{ old('department_id') == $department->department_id ? 'selected' : '' }}>
+                                <option value="{{ $department->id }}"
+                                    {{ old('department_id', $employeedetail->department_id) == $department->id ? 'selected' : '' }}>
                                     {{ $department->name }}
                                 </option>
                             @endforeach

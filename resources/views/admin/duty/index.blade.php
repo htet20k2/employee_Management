@@ -13,6 +13,8 @@
                             class="fas fa-search"></i></button>
                 </div>
             </form>
+
+            
             <!-- Create Button -->
             <a href="{{ route('duties.create') }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Create
                 Duty</a>

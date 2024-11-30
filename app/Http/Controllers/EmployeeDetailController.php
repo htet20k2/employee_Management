@@ -20,23 +20,18 @@ class EmployeeDetailController extends Controller
      public function index(Request $request)
      {
          $search = $request->input('search');
+         $query = EmployeeDetail::query();
      
-         // Fetch employee details with relationships and search by branch name
-         $employeeDetails = EmployeeDetail::with(['branch', 'department', 'duties', 'rank'])
-             ->when($search, function($query) use ($search) {
-                 $query->whereHas('branch', function ($branchQuery) use ($search) {
-                     $branchQuery->where('name', 'like', '%' . $search . '%'); // Adjust for case sensitivity if needed
-                 });
-             })
-             ->paginate(10)
-             ->appends(['search' => $search]);
+         if ($search) {
+             $query->where('branch_name', 'like', "%{$search}%")
+                   ->orWhere('department_name', 'like', "%{$search}%")
+                   ->orWhere('rank_name', 'like', "%{$search}%");
+         }
      
-         $branchs = Branch::all();
-         $departments = Department::all();
-         $dutytimes = Duty::all();
-         $ranks = Rank::all();
+         $employeeDetails = $query->with(['branch', 'department', 'duties', 'rank'])
+                                  ->paginate(10);
      
-         return view('admin.employeedetails.index', compact('employeeDetails', 'branchs', 'departments', 'dutytimes', 'ranks'));
+         return view('admin.employeedetails.index', compact('employeeDetails'));
      }
      
 

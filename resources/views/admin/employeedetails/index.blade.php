@@ -5,56 +5,16 @@
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Employee Detail List</h5>
             <!-- Search Box -->
-            <form method="get" action="{{ route('employeedetail.index') }}" class="mb-3 w-full">
-                <div class="input-group d-flex">
-                    <!-- Branch Search -->
-                    <select class="form-select" id="branch_id" name="search">
-                        <option value="">Search Branch</option>
-                        @foreach ($branchs as $branch)
-                            <option value="{{ $branch->name }}" 
-                                {{ request()->input('search') == $branch->name ? 'selected' : '' }}>
-                                {{ $branch->name }}
-                            </option>
-                        @endforeach
-                    </select>
-            
-                    <!-- Duty Time Search -->
-                    <select class="form-select" id="duty_time" name="duty_time">
-                        <option value="">Search Duty</option>
-                        @foreach ($dutytimes as $dutytime)
-                            <option value="{{ $dutytime->id }}" 
-                                {{ request()->input('duty_time') == $dutytime->id ? 'selected' : '' }}>
-                                {{ $dutytime->duty }}
-                            </option>
-                        @endforeach
-                    </select>
-            
-                    <!-- Department Search -->
-                    <select class="form-select" id="department_id" name="department_id">
-                        <option value="">Search Department</option>
-                        @foreach ($departments as $department)
-                            <option value="{{ $department->id }}" 
-                                {{ request()->input('department_id') == $department->id ? 'selected' : '' }}>
-                                {{ $department->name }}
-                            </option>
-                        @endforeach
-                    </select>
-            
-                    <!-- Rank Search -->
-                    <select class="form-select" id="rank_id" name="rank_id">
-                        <option value="">Search Rank</option>
-                        @foreach ($ranks as $rank)
-                            <option value="{{ $rank->id }}" 
-                                {{ request()->input('rank_id') == $rank->id ? 'selected' : '' }}>
-                                {{ $rank->rank }}
-                            </option>
-                        @endforeach
-                    </select>
-            
-                    <!-- Search Button -->
-                    <button type="submit" class="btn btn-primary">Search</button>
+            <form method="get" action="{{ route('employeedetail.index') }}" class="mb-0">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search" placeholder="Search..."
+                        value="{{ request()->input('search') }}">
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
             </form>
+            
             
             <!-- Create Button -->
             <a href="{{ route('employeedetail.create') }}" class="btn btn-sm  btn-primary"><i class="fas fa-plus-circle"></i> Create

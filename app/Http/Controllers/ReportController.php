@@ -25,11 +25,14 @@ class ReportController extends Controller
         $query->where('department_id', $request->department);
     }
 
-    if ($request->has('duty_status') && $request->duty_status) {
-        $query->whereHas('duties', function ($q) use ($request) {
-            $q->where('status', $request->duty_status);
-        });
+    if ($request->has('duty') && $request->duty) {
+        $query->where('duty_time_id', $request->duty);
     }
+    // if ($request->has('duty') && $request->duty) {
+    //     $query->whereHas('duties', function ($q) use ($request) {
+    //         $q->where('duty', $request->duty);
+    //     });
+    // }
 
     if ($request->has('rank') && $request->rank) {
         $query->where('rank_id', $request->rank);
@@ -47,8 +50,9 @@ class ReportController extends Controller
     $branches = Branch::all();
     $departments = Department::all();
     $ranks = Rank::all();
+    $duties = Duty::all();
 
-    return view('admin.report.index', compact('employeeDetails', 'branches', 'departments', 'ranks'));
+    return view('admin.report.index', compact('employeeDetails', 'branches', 'departments', 'ranks','duties'));
 }
 
     

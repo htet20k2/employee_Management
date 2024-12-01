@@ -24,10 +24,11 @@
                     @endforeach
                 </select>
             
-                <select name="duty_status" class="form-select">
+                <select name="duty" class="form-select">
                     <option value="">Search Duty</option>
-                    <option value="MORNING" {{ request('duty_status') == 'MORNING' ? 'selected' : '' }}>Morning</option>
-                    <option value="EVENING" {{ request('duty_status') == 'EVENING' ? 'selected' : '' }}>Evening</option>
+                    @foreach ($duties as $duty)
+                    <option value="{{$duty->id}}" {{ request('duty') == $duty->id ? 'selected' : '' }}>{{$duty->duty}}</option>
+                    @endforeach
                 </select>
             
                 <select name="rank" class="form-select">

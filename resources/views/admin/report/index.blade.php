@@ -5,57 +5,48 @@
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Employee Detail List</h5>
             <!-- Search Box -->
-            <form method="get" action="{{ route('reports.index') }}" class="mb-3 w-full">
-                <div class="input-group d-flex">
-                    <!-- Branch Search -->
-                    <select class="form-select" id="branch_id" name="search">
-                        <option value="">Search Branch</option>
-                        @foreach ($employeedetaiils as $employeedetail)
-                            <option value="{{ $employeedetail->branch->id }}" 
-                                {{ request()->input('search') == $employeedetail->branch->id ? 'selected' : '' }}>
-                                {{ $employeedetail->branch->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    
+            <form method="get" action="{{ route('reports.index') }}" class="d-flex flex-wrap gap-3">
+                <select name="branch" class="form-select">
+                    <option value="">Search Branch</option>
+                    @foreach ($branches as $branch)
+                        <option value="{{ $branch->id }}" {{ request('branch') == $branch->id ? 'selected' : '' }}>
+                            {{ $branch->name }}
+                        </option>
+                    @endforeach
+                </select>
             
-                    <!-- Duty Time Search -->
-                    <select class="form-select" id="duty_time" name="duty_time">
-                        <option value="">Search Duty</option>
-                        @foreach ($employeedetaiils as $employeedetail)
-                            <option value="{{ $employeedetail->duties->id }}" 
-                                {{ request()->input('duty_time') == $employeedetail->duties->id ? 'selected' : '' }}>
-                                {{ $employeedetail->duties->duty }}
-                            </option>
-                        @endforeach
-                    </select>
-
-                    <!-- Department Search -->
-                    <select class="form-select" id="department_id" name="department_id">
-                        <option value="">Search Department</option>
-                        @foreach ($employeedetaiils as $employeedetail)
-                            <option value="{{ $employeedetail->department->id }}" 
-                                {{ request()->input('department_id') == $employeedetail->department->id ? 'selected' : '' }}>
-                                {{ $employeedetail->department->name }}
-                            </option>
-                        @endforeach
-                    </select>
-
-                    <!-- Rank Search -->
-                    <select class="form-select" id="rank_id" name="rank_id">
-                        <option value="">Search Rank</option>
-                        @foreach ($employeedetaiils as $employeedetail)
-                            <option value="{{ $employeedetail->rank->id }}" 
-                                {{ request()->input('rank_id') == $employeedetail->rank->id ? 'selected' : '' }}>
-                                {{ $employeedetail->rank->rank }}
-                            </option>
-                        @endforeach
-                    </select>
-
+                <select name="department" class="form-select">
+                    <option value="">Search Department</option>
+                    @foreach ($departments as $department)
+                        <option value="{{ $department->id }}" {{ request('department') == $department->id ? 'selected' : '' }}>
+                            {{ $department->name }}
+                        </option>
+                    @endforeach
+                </select>
             
-                    <!-- Search Button -->
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </div>
+                <select name="duty_status" class="form-select">
+                    <option value="">Search Duty</option>
+                    <option value="MORNING" {{ request('duty_status') == 'MORNING' ? 'selected' : '' }}>Morning</option>
+                    <option value="EVENING" {{ request('duty_status') == 'EVENING' ? 'selected' : '' }}>Evening</option>
+                </select>
+            
+                <select name="rank" class="form-select">
+                    <option value="">Search Rank</option>
+                    @foreach ($ranks as $rank)
+                        <option value="{{ $rank->id }}" {{ request('rank') == $rank->id ? 'selected' : '' }}>
+                            {{ $rank->rank }}
+                        </option>
+                    @endforeach
+                </select>
+            
+                <select name="is_training" class="form-select">
+                    <option value="">Is Training</option>
+                    <option value="Yes" {{ request('is_training') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                    <option value="No" {{ request('is_training') == 'No' ? 'selected' : '' }}>No</option>
+                </select>
+            
+                <button class="btn btn-primary" type="submit">Search</button>
+                <a href="{{ route('reports.index') }}" class="btn btn-secondary">Reset</a>
             </form>
             
            
@@ -86,7 +77,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($employeedetaiils as $employeedetail)
+                    @foreach ($employeeDetails as $employeedetail)
                         <tr>
                             <td>{{ $employeedetail->id }}</td>
                             
@@ -114,12 +105,12 @@
 
             <!-- Pagination Links -->
             <div class="mt-3">
-                {{ $employeedetaiils->links() }}
+                {{ $employeeDetails->links() }}
             </div>
             
         </div>
     </div>
-    {{-- {{ $employeedetaiils->links() }} --}}
+    {{-- {{ $employeeDetails->links() }} --}}
 @endsection
 
 <script>

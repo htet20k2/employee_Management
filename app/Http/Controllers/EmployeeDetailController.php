@@ -73,15 +73,16 @@ class EmployeeDetailController extends Controller
             'rank_id' => 'required|exists:ranks,id',
         ]);
 
-        $employeeDetail = EmployeeDetail::create([
-            'branch_id' => $request->branch_id,
-            'department_id' => $request->department_id,
-            'duty_time_id' => $request->duty_status,
-            'rank_id' => $request->rank_id,
-            'enroll_date' => $request->enroll_date,
-            'isTraining' => $request->isTraining,
-            'permanent_date' => $request->permanent_date,
-        ]);
+      
+        $employeeDetail = new EmployeeDetail();
+        $employeeDetail->branch_id = $request->branch_id;
+        $employeeDetail->department_id = $request->department_id;
+        $employeeDetail->duty_time_id = $request->duty_status;
+        $employeeDetail->enroll_date = $request->enroll_date;
+        $employeeDetail->isTraining = $request->isTraining;
+        $employeeDetail->permanent_date = $request->permanent_date;
+        $employeeDetail->rank_id = $request->rank_id;
+        $employeeDetail->save();
 
         // Check if a photo is uploaded
         if ($request->hasFile('emp_photos')) {

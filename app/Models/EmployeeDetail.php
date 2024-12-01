@@ -35,3 +35,4 @@ class EmployeeDetail extends Model
 
     
 }
+

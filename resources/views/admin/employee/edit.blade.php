@@ -233,7 +233,7 @@
 
                 <!-- Submit Buttons -->
                 <div class="text-end">
-                    <a href="{{ route('employee.show') }}" class="btn btn-secondary">
+                    <a href="{{ route('employee.index') }}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left me-1"></i>Back
                     </a>
                     <button type="submit" class="btn btn-primary">Update Employee</button>

@@ -5,8 +5,8 @@
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Employee Detail List</h5>
             <!-- Search Box -->
-            <form method="get" action="{{ route('reports.index') }}" class="d-flex flex-wrap gap-3">
-                <select name="branch" class="form-select">
+            <form method="get" action="{{ route('reports.index') }}" class="d-flex flex-wrap gap-3 row">
+                <select name="branch" class="form-select col">
                     <option value="">Search Branch</option>
                     @foreach ($branches as $branch)
                         <option value="{{ $branch->id }}" {{ request('branch') == $branch->id ? 'selected' : '' }}>
@@ -15,7 +15,7 @@
                     @endforeach
                 </select>
             
-                <select name="department" class="form-select">
+                <select name="department" class="form-select col">
                     <option value="">Search Department</option>
                     @foreach ($departments as $department)
                         <option value="{{ $department->id }}" {{ request('department') == $department->id ? 'selected' : '' }}>
@@ -24,13 +24,14 @@
                     @endforeach
                 </select>
             
-                <select name="duty_status" class="form-select">
+                <select name="duty" class="form-select col">
                     <option value="">Search Duty</option>
-                    <option value="MORNING" {{ request('duty_status') == 'MORNING' ? 'selected' : '' }}>Morning</option>
-                    <option value="EVENING" {{ request('duty_status') == 'EVENING' ? 'selected' : '' }}>Evening</option>
+                    @foreach ($duties as $duty)
+                    <option value="{{$duty->id}}" {{ request('duty') == $duty->id ? 'selected' : '' }}>{{$duty->duty}}</option>
+                    @endforeach
                 </select>
             
-                <select name="rank" class="form-select">
+                <select name="rank" class="form-select col">
                     <option value="">Search Rank</option>
                     @foreach ($ranks as $rank)
                         <option value="{{ $rank->id }}" {{ request('rank') == $rank->id ? 'selected' : '' }}>
@@ -39,14 +40,16 @@
                     @endforeach
                 </select>
             
-                <select name="is_training" class="form-select">
+                <select name="is_training" class="form-select col">
                     <option value="">Is Training</option>
                     <option value="Yes" {{ request('is_training') == 'Yes' ? 'selected' : '' }}>Yes</option>
                     <option value="No" {{ request('is_training') == 'No' ? 'selected' : '' }}>No</option>
                 </select>
             
-                <button class="btn btn-primary" type="submit">Search</button>
-                <a href="{{ route('reports.index') }}" class="btn btn-secondary">Reset</a>
+                <div class="col d-flex gap-2">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                    <a href="{{ route('reports.index') }}" class="btn btn-secondary">Reset</a>
+                </div>
             </form>
             
            
@@ -83,7 +86,7 @@
                             
                             <td>
                                 @if ($employeedetail->emp_photos)
-                                    <img src="{{ asset('storage/' . $employeedetail->emp_photos) }}" alt="Employee Photo" width="50">
+                                <img src="{{ asset('images/' . $employeedetail->emp_photos) }}" alt="Employee Photo" width="50">
                                 @else
                                     No Image
                                 @endif

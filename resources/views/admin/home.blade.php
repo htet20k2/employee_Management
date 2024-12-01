@@ -23,6 +23,8 @@
             padding-top: 1rem;
         }
 
+
+
         .sidebar .nav-link {
             color: #adb5bd;
 
@@ -125,12 +127,24 @@
             transform: scale(1);
         }
         }
+
+        @media (max-width: 767px) {
+
+            .main-content {
+                margin-left: 0;
+            }
+            .sidebar {
+                display: none;
+            }
+        }
+
+   
     </style>
 </head>
 
 <body>
     <!-- Sidebar -->
-    <div class="sidebar position-fixed p-3" style="width: 250px;">
+    <div class="hidden-xs sidebar position-fixed p-3" style="width: 250px" >
         <div class="text-center mb-4">
             <img src="" alt="Logo" class="rounded-circle" style="width: 80px; height: 80px;">
         </div>
@@ -245,7 +259,7 @@
     <!-- Main Content -->
     <div class="main-content">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light navbar-custom mb-4">
+        <nav class="navbar navbar-expand-lg navbar-light navbar-custom mb-4" >
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold" href="#">Admin Dashboard</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"

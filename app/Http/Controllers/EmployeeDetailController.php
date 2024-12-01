@@ -16,23 +16,33 @@ class EmployeeDetailController extends Controller
     /**
      * Display a listing of the resource.
      */
- 
-     public function index(Request $request)
-     {
-         $search = $request->input('search');
-         $query = EmployeeDetail::query();
+    public function index(Request $request)
+    {
+        $search = $request->input('search'); // Get search input.
+        $query = EmployeeDetail::query();   // Initialize the query builder.
+    
+        // Include relationships in the query and filter with search.
+        if (!empty($search)) {
+            $query->whereHas('branch', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            })
+            ->orWhereHas('department', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            })
+            ->orWhereHas('rank', function ($q) use ($search) {
+                $q->where('rank', 'like', "%{$search}%");
+            });
+        }
+    
+        // Fetch data with pagination.
+        $employeeDetails = $query->with(['branch', 'department', 'duties', 'rank'])
+                                 ->paginate(10);
+    
+        // Return to the view.
+        return view('admin.employeedetails.index', compact('employeeDetails'));
+    }
+    
      
-         if ($search) {
-             $query->where('branch_name', 'like', "%{$search}%")
-                   ->orWhere('department_name', 'like', "%{$search}%")
-                   ->orWhere('rank_name', 'like', "%{$search}%");
-         }
-     
-         $employeeDetails = $query->with(['branch', 'department', 'duties', 'rank'])
-                                  ->paginate(10);
-     
-         return view('admin.employeedetails.index', compact('employeeDetails'));
-     }
      
 
     /**

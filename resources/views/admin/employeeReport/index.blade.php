@@ -5,7 +5,7 @@
         <div class="card-header bg-light py-3">
             <div class="row align-items-center">
                 <div class="col-md-4">
-                    <h5 class="mb-0">Employee Report List</h5>
+                    <h5 class="mb-3 md:mb-0">Employee Report List</h5>
                 </div>
                 <div class="col-md-4">
                     <!-- Search Box -->

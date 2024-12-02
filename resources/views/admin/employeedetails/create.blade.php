@@ -2,7 +2,7 @@
 @section('content')
     <div class="card card-custom my-4 border-0 shadow-sm">
         <div class="card-header bg-light">
-            <h5 class="mb-0">Create Employee Detail</h5>
+            <h5 class="mb-3 md:mb-0">Create Employee Detail</h5>
         </div>
 
         <div class="card-body">

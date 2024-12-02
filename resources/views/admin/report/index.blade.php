@@ -1,4 +1,5 @@
 @extends('admin.home')
+
 @section('content')
     <!-- Table Section -->
     <div class="card card-custom my-4 border-0 shadow-sm">
@@ -132,12 +133,12 @@ document.getElementById('department').addEventListener('change', function () {
            
         </div>
 
-        @if (session('success'))
-            <div id="auto-fade-alert" class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Success!</strong> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+    @if (session('success'))
+    <div id="auto-fade-alert" class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!</strong> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
 
         <div class="card-body p-0">
             <table class="table table-hover">
@@ -187,22 +188,21 @@ document.getElementById('department').addEventListener('change', function () {
                 </tbody>
             </table>
 
-            <!-- Pagination Links -->
-            <div class="mt-3">
-                {{ $employeeDetails->appends(request()->query())->links() }}
-            </div>
-            
-        </div>
+        <!-- Pagination Links -->
+        {{ $employeeDetails->links() }}
     </div>
-    {{-- {{ $employeeDetails->links() }} --}}
-@endsection
+
+</div>
 
 <script>
-    setTimeout(function() {
-        var alertElement = document.getElementById('auto-fade-alert');
-        if (alertElement) {
-            var alert = new bootstrap.Alert(alertElement);
-            alert.close();
-        }
-    }, 1000);
+// Auto fade alert after 1 second
+setTimeout(function() {
+    var alertElement = document.getElementById('auto-fade-alert');
+    if (alertElement) {
+        var alert = new bootstrap.Alert(alertElement);
+        alert.close();
+    }
+}, 1000);
 </script>
+
+@endsection

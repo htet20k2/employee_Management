@@ -1,14 +1,10 @@
 <?php
-
-// app/Models/EmployeeDetail.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class EmployeeDetail extends Model
 {
-    // Define relationships with other models
     public function branch() {
         return $this->belongsTo(Branch::class, 'branch_id');
     }

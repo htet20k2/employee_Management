@@ -4,9 +4,9 @@
     <div class="card card-custom my-4 border-0 shadow-sm">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Employee Detail List</h5>
-            <!-- Search Box -->
             <form method="get" action="{{ route('reports.index') }}" class="d-flex flex-wrap gap-3">
-                <select name="branch" class="form-select">
+                <!-- Branch Filter -->
+                <select id="branch" name="branch" class="form-select">
                     <option value="">Search Branch</option>
                     @foreach ($branches as $branch)
                         <option value="{{ $branch->id }}" {{ request('branch') == $branch->id ? 'selected' : '' }}>
@@ -14,8 +14,7 @@
                         </option>
                     @endforeach
                 </select>
-            
-                <select name="department" class="form-select">
+                <select id="department" name="department" class="form-select">
                     <option value="">Search Department</option>
                     @foreach ($departments as $department)
                         <option value="{{ $department->id }}" {{ request('department') == $department->id ? 'selected' : '' }}>
@@ -24,14 +23,16 @@
                     @endforeach
                 </select>
             
+                <!-- Duty Filter -->
                 <select name="duty" class="form-select">
                     <option value="">Search Duty</option>
                     @foreach ($duties as $duty)
-                    <option value="{{$duty->id}}" {{ request('duty') == $duty->id ? 'selected' : '' }}>{{$duty->duty}}</option>
+                        <option value="{{ $duty->id }}" {{ request('duty') == $duty->id ? 'selected' : '' }}>
+                            {{ $duty->duty }}
+                        </option>
                     @endforeach
                 </select>
-            
-                <select name="rank" class="form-select">
+                <select id="rank" name="rank" class="form-select">
                     <option value="">Search Rank</option>
                     @foreach ($ranks as $rank)
                         <option value="{{ $rank->id }}" {{ request('rank') == $rank->id ? 'selected' : '' }}>
@@ -39,7 +40,7 @@
                         </option>
                     @endforeach
                 </select>
-            
+                <!-- Is Training Filter -->
                 <select name="is_training" class="form-select">
                     <option value="">Is Training</option>
                     <option value="Yes" {{ request('is_training') == 'Yes' ? 'selected' : '' }}>Yes</option>
@@ -49,6 +50,57 @@
                 <button class="btn btn-primary" type="submit">Search</button>
                 <a href="{{ route('reports.index') }}" class="btn btn-secondary">Reset</a>
             </form>
+            
+             
+            <script>
+               document.getElementById('branch').addEventListener('change', function () {
+    const branchId = this.value;
+    const departmentSelect = document.getElementById('department');
+    const rankSelect = document.getElementById('rank');
+
+    if (branchId) {
+        fetch(`/api/departments/${branchId}`)
+            .then(response => response.json())
+            .then(data => {
+                departmentSelect.innerHTML = '<option value="">Search Department</option>';
+                data.forEach(department => {
+                    const option = document.createElement('option');
+                    option.value = department.id;
+                    option.textContent = department.name;
+                    departmentSelect.appendChild(option);
+                });
+                rankSelect.innerHTML = '<option value="">Search Rank</option>'; // Reset rank
+            })
+            .catch(error => console.error('Error fetching departments:', error));
+    } else {
+        departmentSelect.innerHTML = '<option value="">Search Department</option>';
+        rankSelect.innerHTML = '<option value="">Search Rank</option>';
+    }
+});
+
+document.getElementById('department').addEventListener('change', function () {
+    const departmentId = this.value;
+    const rankSelect = document.getElementById('rank');
+
+    if (departmentId) {
+        fetch(`/api/ranks/${departmentId}`)
+            .then(response => response.json())
+            .then(data => {
+                rankSelect.innerHTML = '<option value="">Search Rank</option>';
+                data.forEach(rank => {
+                    const option = document.createElement('option');
+                    option.value = rank.id;
+                    option.textContent = rank.rank;
+                    rankSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching ranks:', error));
+    } else {
+        rankSelect.innerHTML = '<option value="">Search Rank</option>';
+    }
+});
+
+            </script>
             
            
         </div>
@@ -75,6 +127,7 @@
                         <th>Permanent Date</th>
                         <th>Is Training</th>
                         
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -97,6 +150,9 @@
                             <td>{{ $employeedetail->enroll_date }}</td>
                             <td>{{ $employeedetail->permanent_date }}</td>
                             <td>{{ $employeedetail->isTraining ? 'Yes' : 'No' }}</td>
+                            
+                            
+                            
 
                             
                         </tr>
@@ -106,7 +162,7 @@
 
             <!-- Pagination Links -->
             <div class="mt-3">
-                {{ $employeeDetails->links() }}
+                {{ $employeeDetails->appends(request()->query())->links() }}
             </div>
             
         </div>

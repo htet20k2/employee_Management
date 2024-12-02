@@ -1,65 +1,71 @@
 <?php
 
-// app/Http/Controllers/ReportController.php
-
 namespace App\Http\Controllers;
 
-use App\Models\EmployeeDetail;
 use App\Models\Branch;
-use App\Models\Department;
 use App\Models\Rank;
+use App\Models\Department;
+use App\Models\EmployeeDetail;
 use App\Models\Duty;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class ReportController extends Controller
 {
     public function index(Request $request)
     {
         $query = EmployeeDetail::query();
-    
-        // Apply filters based on the request
-        if ($request->has('branch') && $request->branch) {
-            $query->whereHas('branch', function($q) use ($request) {
-                $q->where('id', $request->branch);
+
+        // Filter by branch
+        if ($request->filled('branch')) {
+            $query->where('branch_id', $request->branch);
+        }
+
+        // Filter by department (ensure it belongs to the selected branch)
+        if ($request->filled('department')) {
+            $query->whereHas('department', function ($q) use ($request) {
+                $q->where('id', $request->department)
+                  ->where('branch_id', $request->branch); // Ensure department belongs to selected branch
             });
         }
-    
-        if ($request->has('department') && $request->department) {
-            $query->whereHas('department', function($q) use ($request) {
-                $q->where('id', $request->department);
+
+        // Filter by rank (ensure it belongs to the selected department)
+        if ($request->filled('rank')) {
+            $query->whereHas('rank', function ($q) use ($request) {
+                $q->where('id', $request->rank)
+                  ->where('department_id', $request->department); // Ensure rank belongs to selected department
             });
         }
-    
-        if ($request->has('rank') && $request->rank) {
-            $query->whereHas('rank', function($q) use ($request) {
-                $q->where('id', $request->rank);
-            });
-        }
-    
-        if ($request->has('duty') && $request->duty) {
+
+        // Filter by duty
+        if ($request->filled('duty')) {
             $query->where('duty_time_id', $request->duty);
         }
-    
-        if ($request->has('is_training') && $request->is_training !== null) {
-            $isTraining = $request->is_training === 'Yes' ? 1 : 0;
-            $query->where('isTraining', $isTraining);
+
+        // Filter by is_training
+        if ($request->filled('is_training')) {
+            $query->where('isTraining', $request->is_training === 'Yes' ? 1 : 0);
         }
-    
-        // Eager load relationships and paginate
-        $employeeDetails = $query->with(['branch', 'department', 'duties', 'rank'])->paginate(10);
-    
-        // Fetch filter options
+
+        // Load related models with pagination
+        $employeeDetails = $query->with(['branch', 'department', 'rank', 'duties'])->paginate(10);
+
+        // Dropdown data for filters
         $branches = Branch::all();
         $departments = Department::all();
-        $ranks = Rank::all();
+        $ranks = Rank::all(); 
         $duties = Duty::all();
-    
+
         return view('admin.report.index', compact('employeeDetails', 'branches', 'departments', 'ranks', 'duties'));
-
-
     }
 
-    
-    
-    
+    public function getDepartmentsByBranch($branchId): JsonResponse
+    {
+        return response()->json(Department::where('branch_id', $branchId)->get());
+    }
+
+    public function getRanksByDepartment($departmentId): JsonResponse
+    {
+        return response()->json(Rank::where('department_id', $departmentId)->get());
+    }
 }

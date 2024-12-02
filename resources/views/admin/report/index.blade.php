@@ -2,8 +2,8 @@
 @section('content')
     <!-- Table Section -->
     <div class="card card-custom my-4 border-0 shadow-sm">
-        <div class="card-header bg-light d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Employee Detail List</h5>
+        <div class="card-header bg-light d-flex flex-wrap justify-content-between align-items-center">
+            <h5 class="mb-3 md:mb-0">Employee Detail List</h5>
 
             <form method="get" action="{{ route('reports.index') }}" class="d-flex flex-wrap gap-3">
                 <!-- Branch Filter -->

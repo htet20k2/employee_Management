@@ -2,7 +2,7 @@
 @section('content')
     <div class="card card-custom my-4">
         <div class="card-header bg-white">
-            <h5 class="mb-0">Edit Department</h5>
+            <h5 class="mb-3 md:mb-0">Edit Department</h5>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ route('departments.update', $department->id) }}">

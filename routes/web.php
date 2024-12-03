@@ -47,19 +47,7 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::resource('/reports',ReportController::class);
     Route::resource('/details',DetailController::class);
 
-    // Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
-
-
-    // Route::get('/departments', function (Request $request) {
-    //     $branchId = $request->query('branch_id');
-    //     return Department::where('branch_id', $branchId)->get();
-    // });
-    
-    // Route::get('/ranks', function (Request $request) {
-    //     $departmentId = $request->query('department_id');
-    //     return Rank::where('department_id', $departmentId)->get();
-    // });
-    
+  
     Route::get('/api/departments/{branchId}', function ($branchId) {
         return Department::where('branch_id', $branchId)->get();
     });

@@ -56,6 +56,22 @@ class ReportController extends Controller
         return view('admin.report.index', compact('employeeDetails', 'branches', 'departments', 'ranks', 'duties'));
     }
 
+    public function getDepartments($branchId)
+    {
+        // Assuming 'branch_id' is the foreign key in the departments table
+        $departments = Department::where('branch_id', $branchId)->get();
+    
+        return response()->json([
+            'departments' => $departments
+        ]);
+    }
+    
+public function getRanks($departmentId)
+{
+    $ranks = Rank::where('department_id', $departmentId)->get();
+    return response()->json(['ranks' => $ranks]);
+}
+
     
     
 }

@@ -18,4 +18,10 @@ class Department extends Model
     {
         return $this->hasMany(Rank::class);
     }
+
+    // Add a method to filter departments by branch
+    public function scopeByBranch($query, $branchId)
+    {
+        return $query->where('branch_id', $branchId);
+    }
 }

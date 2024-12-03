@@ -9,7 +9,7 @@
             <form method="get" action="{{ route('reports.index') }}" class="d-flex flex-wrap gap-3">
                 <!-- Branch Filter -->
                 <select id="branch" name="branch" class="form-select">
-=======
+
             <!-- Search Box -->
             <form method="get" action="{{ route('reports.index') }}" class="d-flex flex-wrap gap-3 row">
                 <select name="branch" class="form-select col">
@@ -23,7 +23,7 @@
                 </select>
 
                 <select id="department" name="department" class="form-select">
-=======
+
             
                 <select name="department" class="form-select col">
 
@@ -38,7 +38,7 @@
 
                 <!-- Duty Filter -->
                 <select name="duty" class="form-select">
-=======
+
                 <select name="duty" class="form-select col">
 
                     <option value="">Search Duty</option>
@@ -50,7 +50,7 @@
                 </select>
 
                 <select id="rank" name="rank" class="form-select">
-=======
+
             
                 <select name="rank" class="form-select col">
 
@@ -64,7 +64,7 @@
 
                 <!-- Is Training Filter -->
                 <select name="is_training" class="form-select">
-=======
+
             
                 <select name="is_training" class="form-select col">
 

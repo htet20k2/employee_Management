@@ -77,55 +77,6 @@
             </form>
             
              
-            <script>
-               document.getElementById('branch').addEventListener('change', function () {
-    const branchId = this.value;
-    const departmentSelect = document.getElementById('department');
-    const rankSelect = document.getElementById('rank');
-
-    if (branchId) {
-        fetch(`/api/departments/${branchId}`)
-            .then(response => response.json())
-            .then(data => {
-                departmentSelect.innerHTML = '<option value="">Search Department</option>';
-                data.forEach(department => {
-                    const option = document.createElement('option');
-                    option.value = department.id;
-                    option.textContent = department.name;
-                    departmentSelect.appendChild(option);
-                });
-                rankSelect.innerHTML = '<option value="">Search Rank</option>'; // Reset rank
-            })
-            .catch(error => console.error('Error fetching departments:', error));
-    } else {
-        departmentSelect.innerHTML = '<option value="">Search Department</option>';
-        rankSelect.innerHTML = '<option value="">Search Rank</option>';
-    }
-});
-
-document.getElementById('department').addEventListener('change', function () {
-    const departmentId = this.value;
-    const rankSelect = document.getElementById('rank');
-
-    if (departmentId) {
-        fetch(`/api/ranks/${departmentId}`)
-            .then(response => response.json())
-            .then(data => {
-                rankSelect.innerHTML = '<option value="">Search Rank</option>';
-                data.forEach(rank => {
-                    const option = document.createElement('option');
-                    option.value = rank.id;
-                    option.textContent = rank.rank;
-                    rankSelect.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Error fetching ranks:', error));
-    } else {
-        rankSelect.innerHTML = '<option value="">Search Rank</option>';
-    }
-});
-
-            </script>
             
            
         </div>
@@ -186,7 +137,7 @@ document.getElementById('department').addEventListener('change', function () {
             </table>
 
         <!-- Pagination Links -->
-        {{ $employeeDetails->links() }}
+        {{-- {{ $employeeDetails->links() }} --}}
     </div>
 
 </div>

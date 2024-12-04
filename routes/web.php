@@ -9,6 +9,8 @@ use App\Http\Controllers\DetailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeDetailController;
+use App\Http\Controllers\BranchDetailController;
+use App\Http\Controllers\DepartmentDetailController;
 use App\Http\Controllers\RankController;
 use App\Models\Department;
 use App\Models\Rank;
@@ -47,24 +49,14 @@ Route::prefix('admin')->middleware('auth')->group(function(){
 
     Route::resource('/employeedetail',EmployeeDetailController::class);
 
+
+    Route::resource('/branchdetail',BranchDetailController::class);
+
+    Route::resource('/departmentdetail',DepartmentDetailController::class);
+
+
     Route::resource('/reports',ReportController::class);
     Route::resource('/details',DetailController::class);
-
-  
-// Add these routes in your `web.php`
-
-Route::get('/departments/{branchId}', [ReportController::class, 'getDepartments']);
-
-
-// Route to fetch ranks based on department
-Route::get('/api/ranks', function (Request $request) {
-    $departmentId = $request->input('department_id');
-    $ranks = Rank::where('department_id', $departmentId)->get();
-
-    return response()->json(['ranks' => $ranks]);
-});
-
-
 
 
 

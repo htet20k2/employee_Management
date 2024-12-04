@@ -7,21 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Department extends Model
 {
     use HasFactory;
-    protected $guarded = [];
 
-    public function branch()
+    protected $fillable = ['department_name'];
+
+    public function branches()
     {
-        return $this->belongsTo(Branch::class);
+        return $this->belongsToMany(Branch::class, 'branch_details');
     }
 
-    public function ranks()
-    {
-        return $this->hasMany(Rank::class);
-    }
-
-    // Add a method to filter departments by branch
-    public function scopeByBranch($query, $branchId)
-    {
-        return $query->where('branch_id', $branchId);
-    }
-}

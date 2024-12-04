@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Branch extends Model
 {
     use HasFactory;
-    protected $guarded = [];
 
+    protected $fillable = ['branch_name'];
     public function departments()
     {
-        return $this->hasMany(Department::class);
+        return $this->belongsToMany(Department::class, 'branch_details');
     }
 }

@@ -78,7 +78,7 @@
 
                             <td>
                                 <a href="{{ route('employeedetail.edit', $employeeDetail->id) }}" class="btn btn-sm btn-info"><i
-                                        class="fas fa-edit"></i> Edit</a>
+                                        class="fas fa-edit"></i></a>
                             </td>
                         </tr>
                     @endforeach

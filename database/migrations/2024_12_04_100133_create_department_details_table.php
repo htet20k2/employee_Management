@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('departments', function (Blueprint $table) {
+        Schema::create('department_details', function (Blueprint $table) {
             $table->id();
-            $table->String('name');
-            $table->Text('description')->nullable();
             $table->timestamps();
-            $table->unsignedBigInteger('branch_id')->nullable(); // Add this if it doesn't exist
-            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            $table->foreignId('department_id')->constrained()->onDelete('cascade');  
+            $table->foreignId('rank_id')->constrained()->onDelete('cascade');  
+
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('departments');
+        Schema::dropIfExists('department_details');
     }
 };

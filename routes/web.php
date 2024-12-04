@@ -9,6 +9,8 @@ use App\Http\Controllers\DetailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeDetailController;
+use App\Http\Controllers\BranchDetailController;
+use App\Http\Controllers\DepartmentDetailController;
 use App\Http\Controllers\RankController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -44,19 +46,18 @@ Route::prefix('admin')->middleware('auth')->group(function(){
 
     Route::resource('/employeedetail',EmployeeDetailController::class);
 
+
+    Route::resource('/branchdetail',BranchDetailController::class);
+
+    Route::resource('/departmentdetail',DepartmentDetailController::class);
+
+
     Route::resource('/reports',ReportController::class);
     Route::resource('/details',DetailController::class);
 
   
-    Route::get('/api/departments/{branchId}', function ($branchId) {
-        return Department::where('branch_id', $branchId)->get();
-    });
+  
     
-    Route::get('/api/ranks/{departmentId}', function ($departmentId) {
-        return Rank::where('department_id', $departmentId)->get();
-    });
-    
-
 
 
 });

@@ -16,46 +16,44 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
-        // Get all branches, departments, and ranks for the dropdowns
-        $branches = Branch::all();
-        $departments = Department::all();
-        $ranks = Rank::all();
-        $duties = Duty::all(); // Assuming you have a Duty model
+        $query = EmployeeDetail::query();
     
-        // Start the query for employee details
-        $query = EmployeeDetail::with(['branch', 'department', 'rank']);
-    
-        // Filter by branch if provided
-        if ($request->filled('branch')) {
+        if ($request->has('branch') && $request->branch) {
             $query->where('branch_id', $request->branch);
         }
     
-        // Filter by department if provided
-        if ($request->filled('department')) {
+        if ($request->has('department') && $request->department) {
             $query->where('department_id', $request->department);
         }
     
-        // Filter by rank if provided
-        if ($request->filled('rank')) {
+        if ($request->has('duty') && $request->duty) {
+            $query->where('duty_time_id', $request->duty);
+        }
+    
+        if ($request->has('rank') && $request->rank) {
             $query->where('rank_id', $request->rank);
         }
     
-        // Filter by duty status if provided
-        if ($request->filled('duty')) {
-            $query->where('duty_id', $request->duty);
+        if ($request->has('is_training') && $request->is_training !== null) {
+            $query->where('isTraining', $request->is_training == 'Yes' ? 1 : 0);
         }
     
-        // Filter by is_training status if provided
-        if ($request->filled('is_training')) {
-            $query->where('is_training', $request->is_training === 'Yes');
-        }
     
-        // Execute the query and get the results
-        $employeeDetails = $query->paginate(10); // Adjust the pagination as necessary
+        // Fetch data
+        $employeeDetails = $query->with(['branch', 'department', 'duties', 'rank'])->paginate(10);
+    
+ 
+        // Fetch filter data
+        $branches = Branch::all();
+        $departments = Department::all();
+        $ranks = Rank::all();
+        $duties = Duty::all();
+        $employeeDetails=EmployeeDetail::all();
+
     
         return view('admin.report.index', compact('employeeDetails', 'branches', 'departments', 'ranks', 'duties'));
     }
-
+    
     
     
 }

@@ -7,15 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Department extends Model
 {
     use HasFactory;
-    protected $guarded = [];
 
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class);
-    }
+    protected $fillable = ['department_name'];
 
-    public function ranks()
+    public function branches()
     {
-        return $this->hasMany(Rank::class);
+        return $this->belongsToMany(Branch::class, 'branch_details');
     }
 }

@@ -12,6 +12,9 @@ use App\Http\Controllers\EmployeeDetailController;
 use App\Http\Controllers\BranchDetailController;
 use App\Http\Controllers\DepartmentDetailController;
 use App\Http\Controllers\RankController;
+use App\Models\Department;
+use App\Models\Rank;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -55,9 +58,7 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::resource('/reports',ReportController::class);
     Route::resource('/details',DetailController::class);
 
-  
-  
-    
+
 
 
 });

@@ -53,7 +53,7 @@ class ReportController extends Controller
     
         return view('admin.report.index', compact('employeeDetails', 'branches', 'departments', 'ranks', 'duties'));
     }
-    
+
     
     
 }

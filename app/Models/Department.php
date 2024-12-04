@@ -14,4 +14,4 @@ class Department extends Model
     {
         return $this->belongsToMany(Branch::class, 'branch_details');
     }
-}
+

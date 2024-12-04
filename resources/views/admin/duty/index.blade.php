@@ -57,7 +57,7 @@
                             <td>{{ $duty->status }}</td>
                             <td>
                                 <a href="{{ route('duties.edit', $duty->id) }}" class="btn btn-sm btn-info"><i
-                                        class="fas fa-edit"></i> Edit</a>
+                                        class="fas fa-edit"></i></a>
 
                                 <!-- Delete Form -->
                                 <form action="{{ route('duties.destroy', $duty->id) }}" method="POST"
@@ -66,7 +66,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger"
                                         onclick="return confirm('Are you sure you want to delete this duty?')">
-                                        <i class="fas fa-trash"></i> Delete
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
                             </td>

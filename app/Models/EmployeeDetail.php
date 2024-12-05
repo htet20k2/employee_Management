@@ -27,5 +27,9 @@ class EmployeeDetail extends Model
         return $this->belongsTo(BranchDetail::class, 'branchdetail_id');
     }
   
+    public function departmentdetail()
+    {
+        return $this->belongsTo(BranchDetail::class, 'departmentdetail_id');
+    }
 
 }

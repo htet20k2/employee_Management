@@ -4,16 +4,7 @@
     <div class="card card-custom my-4 border-0 shadow-sm">
         <div class="card-header bg-light d-flex flex-wrap justify-content-between align-items-center">
             <h5 class="mb-3 md:mb-0">Employee Detail List</h5>
-            <!-- Search Box -->
-            {{-- <form method="get" action="{{ route('employeedetail.index') }}" class="mb-0">
-                <div class="input-group">
-                    <input type="text" class="form-control" name="search" placeholder="Search..."
-                        value="{{ request()->input('search') }}">
-                    <button class="btn btn-outline-secondary" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </form> --}}
+ 
 
             <form method="get" action="{{ route('employeedetail.index') }}" class="messageBox">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >

@@ -22,9 +22,10 @@ class EmployeeDetail extends Model
         return $this->belongsTo(Duty::class, 'duty_time_id');
     }
 
-    // Method to get departments related to a specific branch
-    public function getDepartmentsByBranch($branchId)
+    public function branchdetail()
     {
-        return Department::byBranch($branchId)->get();
+        return $this->belongsTo(BranchDetail::class, 'branchdetail_id');
     }
+  
+
 }

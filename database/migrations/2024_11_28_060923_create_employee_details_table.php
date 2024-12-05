@@ -18,10 +18,16 @@ return new class extends Migration
             $table->unsignedBigInteger('department_id');         
             $table->unsignedBigInteger('duty_time_id');         
             $table->unsignedBigInteger('rank_id');   
+            $table->unsignedBigInteger('branchdetail_id');  
             $table->string('enroll_date')->nullable();
             $table->boolean('isTraining')->default(false);
             $table->string('permanent_date')->nullable();
             $table->string('emp_photos', 255)->nullable();
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
+            $table->foreign('rank_id')->references('id')->on('ranks')->onDelete('cascade');
+
+
         });
     }
 

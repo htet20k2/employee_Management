@@ -40,6 +40,9 @@ class EmployeeDetailController extends Controller
     
         // Return to the view.
         return view('admin.employeedetails.index', compact('employeeDetails'));
+
+        
+        
     }
     
      
@@ -48,17 +51,46 @@ class EmployeeDetailController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {   
-        $branchs = Branch::all();
-        $departments = Department::all();
+    public function create(Request $request)
+    {
+        // Fetch all branches
+        $branches = Branch::all();
+    
+        // Initialize variables as empty collections
+        $departments = collect();
+        $ranks = collect();
+    
+        // Fetch other required models
         $dutytimes = Duty::all();
-        $ranks = Rank::all();
         $employeeDetail = EmployeeDetail::all();
-        return view('admin.employeedetails.create', compact('branchs','departments','dutytimes','ranks', 'employeeDetail'));
+    
+        // Check if a branch_id is provided and filter departments accordingly
+        if ($request->filled('branch_id')) {
+            $branch = Branch::find($request->branch_id);
+            if ($branch) {
+                $departments = $branch->departments;  // Get departments related to the selected branch
+            }
+        }
+    
+        // Check if a department_id is provided and filter ranks accordingly
+        if ($request->filled('department_id')) {
+            $department = Department::find($request->department_id);
+            if ($department) {
+                $ranks = $department->ranks;  // Get ranks related to the selected department
+            }
+        }
+    
+        // Return data to the view
+        return view('admin.employeedetails.create', compact(
+            'branches',
+            'departments',
+            'ranks',
+            'dutytimes',
+            'employeeDetail'
+        ));
     }
-
-
+    
+    
     public function store(Request $request)
     {
 
@@ -95,6 +127,7 @@ class EmployeeDetailController extends Controller
         }
 
         return redirect()->route('employeedetail.index')->with('success', 'Employee Detail added successfully.');
+
     }
 
     /**
@@ -191,4 +224,19 @@ public function update($id, Request $request)
 
         return redirect()->route('employee.index')->with('success', 'Employee Detail deleted successfully.');
     }
+
+ 
+    
+    public function getDepartmentsByBranch(Request $request)
+    {
+        $branchId = $request->branch_id;
+    
+        // Fetch departments related to the selected branch through the pivot table
+        $departments = Department::whereHas('branchDetails', function ($query) use ($branchId) {
+            $query->where('branch_id', $branchId);
+        })->get();
+    
+        return response()->json($departments);
+    }
+    
 }

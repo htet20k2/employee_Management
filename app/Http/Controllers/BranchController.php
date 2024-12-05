@@ -99,4 +99,6 @@ class BranchController extends Controller
 
         return redirect()->route('branches.index')->with('success', 'Branch deleted successfully.');
     }
+
+    
 }

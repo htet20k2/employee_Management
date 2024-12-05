@@ -8,6 +8,6 @@ class Rank extends Model
 {
     public function department()
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsToMany(Department::class, 'department_details');
     }
 }

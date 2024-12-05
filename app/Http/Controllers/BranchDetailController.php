@@ -106,7 +106,18 @@ public function destroy(string $id)
     $branchDetail = BranchDetail::findOrFail($id);
     $branchDetail->delete();
 
-    return redirect()->route('branchdetails.index')->with('success', 'branch Detail deleted successfully.');
+    return redirect()->route('branchdetail.index')->with('success', 'branch Detail deleted successfully.');
 }
+
+// In your BranchDetailController
+public function getDepartments(Request $request)
+{
+    $branchId = $request->input('branch_id');
+
+    // Fetch departments related to the branch
+    $departments = Department::where('branch_id', $branchId)->get(['id', 'name']); // Adjust field names as needed
+    return response()->json($departments);
+}
+
 
 }

@@ -10,8 +10,14 @@ class Department extends Model
 
     protected $fillable = ['department_name'];
 
-    public function branches()
+    public function branch()
     {
-        return $this->belongsToMany(Branch::class, 'branch_details');
+        return $this->belongsTo(Branch::class, 'branch_details','branch_id');
     }
 
+    public function rank()
+{
+    return $this->belongsToMany(Rank::class, 'department_details','rank_id');
+}
+
+}

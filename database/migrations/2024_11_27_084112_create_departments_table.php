@@ -18,6 +18,10 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('branch_id')->nullable(); // Add this if it doesn't exist
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            if (!Schema::hasColumn('departments', 'branch_id')) {
+                $table->unsignedBigInteger('branch_id')->nullable();
+                $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            }
         });
     }
 

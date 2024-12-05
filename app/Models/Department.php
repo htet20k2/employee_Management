@@ -18,6 +18,7 @@ class Department extends Model
     public function rank()
 {
     return $this->belongsToMany(Rank::class, 'department_details','rank_id');
+    return $this->hasMany(Rank::class);
 }
 
 }

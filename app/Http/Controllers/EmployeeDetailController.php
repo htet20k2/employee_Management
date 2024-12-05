@@ -56,7 +56,7 @@ class EmployeeDetailController extends Controller
         // Fetch all branches
         $branches = Branch::all();
     
-        // Initialize variables as empty collections
+        // Initialize variables
         $departments = collect();
         $ranks = collect();
     
@@ -64,23 +64,23 @@ class EmployeeDetailController extends Controller
         $dutytimes = Duty::all();
         $employeeDetail = EmployeeDetail::all();
     
-        // Check if a branch_id is provided and filter departments accordingly
+        // Filter departments based on branch_id
         if ($request->filled('branch_id')) {
             $branch = Branch::find($request->branch_id);
             if ($branch) {
-                $departments = $branch->departments;  // Get departments related to the selected branch
+                $departments = $branch->departments;
             }
         }
     
-        // Check if a department_id is provided and filter ranks accordingly
+        // Filter ranks based on department_id
         if ($request->filled('department_id')) {
             $department = Department::find($request->department_id);
             if ($department) {
-                $ranks = $department->ranks;  // Get ranks related to the selected department
+                $ranks = $department->ranks;
             }
         }
     
-        // Return data to the view
+        // Pass the selected branch and department to the view
         return view('admin.employeedetails.create', compact(
             'branches',
             'departments',
@@ -223,20 +223,6 @@ public function update($id, Request $request)
         $employee->delete();
 
         return redirect()->route('employee.index')->with('success', 'Employee Detail deleted successfully.');
-    }
-
- 
-    
-    public function getDepartmentsByBranch(Request $request)
-    {
-        $branchId = $request->branch_id;
-    
-        // Fetch departments related to the selected branch through the pivot table
-        $departments = Department::whereHas('branchDetails', function ($query) use ($branchId) {
-            $query->where('branch_id', $branchId);
-        })->get();
-    
-        return response()->json($departments);
     }
     
 }

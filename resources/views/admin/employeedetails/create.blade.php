@@ -19,14 +19,15 @@
                         </option>
                     @endforeach
                 </select>
+                
             </div>
 
             <div class="form-group">
                 <label for="department_id" class="form-label">Department</label>
-                <select class="form-control" id="department" name="department_id" required>
+                <select class="form-control" id="department" name="department_id" onchange="this.form.submit()" required>
                     <option value="">Select Department</option>
                     @forelse ($departments as $department)
-                        <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                        <option value="{{ $department->id }}" {{ request('department_id') == $department->id ? 'selected' : '' }}>
                             {{ $department->name }}
                         </option>
                     @empty
@@ -34,6 +35,7 @@
                     @endforelse
                 </select>
             </div>
+            
         </form>
 
         <!-- Main form for creating employee details -->
@@ -55,7 +57,7 @@
                     <label for="rank_id" class="form-label">Rank</label>
                     <select class="form-control" id="rank_id" name="rank_id" required>
                         <option value="">Select Rank</option>
-                        @forelse ($ranks as $rank)
+                        @forelse ($ranks ?? [] as $rank)
                         <option value="{{ $rank->id }}" {{ old('rank_id') == $rank->id ? 'selected' : '' }}>
                             {{ $rank->name }}
                         </option>

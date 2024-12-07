@@ -13,9 +13,7 @@ use Illuminate\Http\Request;
 
 class EmployeeDetailController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request)
     {
         $search = $request->input('search'); // Get search input.
@@ -45,12 +43,6 @@ class EmployeeDetailController extends Controller
         
     }
     
-     
-     
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(Request $request)
     {
         // Fetch all branches
@@ -130,9 +122,7 @@ class EmployeeDetailController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
+ 
     public function show(string $id)
     {
         return view('admin.employeedetails.show', compact('employeedetail'));
@@ -140,12 +130,7 @@ class EmployeeDetailController extends Controller
     }
 
 
-    
 
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         
@@ -157,12 +142,7 @@ class EmployeeDetailController extends Controller
         return view('admin.employeedetails.edit',compact('branchs', 'departments', 'dutytimes', 'ranks', 'employeedetail'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-/**
- * Update the specified resource in storage.
- */
+ 
 public function update($id, Request $request)
 {
     $request->validate([

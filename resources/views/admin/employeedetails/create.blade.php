@@ -20,6 +20,7 @@
                     @endforeach
                 </select>
                 
+                
             </div>
 
             <div class="form-group">
@@ -42,6 +43,23 @@
         <form method="POST" action="{{ route('employeedetail.store') }}" enctype="multipart/form-data">
             @csrf
 
+                <!-- Rank -->
+                <div class="mb-3">
+                    <label for="rank_id" class="form-label">Rank</label>
+                    <select class="form-control" id="rank_id" name="rank_id" required>
+                        <option value="">Select Rank</option>
+                        @forelse ($ranks ?? [] as $rank)
+                                <option value="{{ $rank->id }}" {{ old('rank_id') == $rank->id ? 'selected' : '' }}>
+                                    {{ $rank->name }}
+                                </option>
+                        @empty
+                            <option value="">No ranks available for this department</option>
+                        @endforelse
+                    </select>
+
+                </div>
+
+
             <!-- Employee Photos -->
             <div class="mb-3">
                 <label for="emp_photos" class="form-label">Employee Photos</label>
@@ -52,36 +70,9 @@
             </div>
 
 
-                <!-- Rank -->
-                <div class="mb-3">
-                    <label for="rank_id" class="form-label">Rank</label>
-                    <select class="form-control" id="rank_id" name="rank_id" required>
-                        <option value="">Select Rank</option>
-                        @forelse ($ranks ?? [] as $rank)
-                        <option value="{{ $rank->id }}" {{ old('rank_id') == $rank->id ? 'selected' : '' }}>
-                            {{ $rank->name }}
-                        </option>
-                    @empty
-                        <option value="">No ranks available for this department</option>
-                    @endforelse
-                    </select>
-                </div>
+            
 
-                {{-- <div class="form-group mb-3">
-                    <label for="rank_id" class="form-label">Rank</label>
-                    <select class="form-control" id="rank_id" name="rank_id" required>
-                        <option value="">Select Rank</option>
-                        @forelse ($ranks as $rank)
-                            <option value="{{ $rank->id }}" {{ old('rank_id') == $rank->id ? 'selected' : '' }}>
-                                {{ $rank->name }}
-                            </option>
-                        @empty
-                            <option value="">No ranks available for this department</option>
-                        @endforelse
-                    </select>
-                </div> --}}
-
-                
+                                
                 <!-- Duty Status -->
                 <div class="row">
                     <div class="mb-3 col">

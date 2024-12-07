@@ -12,13 +12,16 @@ class Department extends Model
 
     public function branch()
     {
-        return $this->belongsTo(Branch::class, 'branch_details','branch_id');
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
-    public function rank()
-{
-    return $this->belongsToMany(Rank::class, 'department_details','rank_id');
-    return $this->hasMany(Rank::class);
-}
+    public function ranks()
+    {
+        return $this->belongsToMany(Rank::class, 'department_details', 'department_id', 'rank_id');
+    }
 
+    public function departmentDetails() {
+        // One department can have many department details (employees, etc.)
+        return $this->hasMany(DepartmentDetail::class, 'department_id', 'branch_id');
+    }
 }

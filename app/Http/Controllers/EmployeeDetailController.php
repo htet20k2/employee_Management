@@ -45,42 +45,36 @@ class EmployeeDetailController extends Controller
     
     public function create(Request $request)
     {
-        // Fetch all branches
+        // Fetch all branches and other required models
         $branches = Branch::all();
-    
-        // Initialize variables
-        $departments = collect();
-        $ranks = collect();
-    
-        // Fetch other required models
         $dutytimes = Duty::all();
-        $employeeDetail = EmployeeDetail::all();
+    
+        // Initialize variables for departments and ranks
+        $departments = collect();
+        $ranks = collect(); // Make sure it's always a collection
     
         // Filter departments based on branch_id
         if ($request->filled('branch_id')) {
-            $branch = Branch::find($request->branch_id);
-            if ($branch) {
-                $departments = $branch->departments;
-            }
+            $branch = Branch::with('departments')->find($request->branch_id);
+            $departments = $branch ? $branch->departments : collect();
         }
     
         // Filter ranks based on department_id
         if ($request->filled('department_id')) {
-            $department = Department::find($request->department_id);
-            if ($department) {
-                $ranks = $department->ranks;
-            }
+            $department = Department::with('ranks')->find($request->department_id);
+            $ranks = $department ? $department->ranks : collect(); // Always an empty collection if no ranks
         }
     
-        // Pass the selected branch and department to the view
+        // Pass data to the view
         return view('admin.employeedetails.create', compact(
             'branches',
             'departments',
             'ranks',
-            'dutytimes',
-            'employeeDetail'
+            'dutytimes'
         ));
     }
+    
+    
     
     
     public function store(Request $request)
@@ -194,9 +188,7 @@ public function update($id, Request $request)
 
 
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id)
     {
         $employee = EmployeeDetail::findOrFail($id);

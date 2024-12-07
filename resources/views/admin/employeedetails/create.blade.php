@@ -48,16 +48,20 @@
                     <label for="rank_id" class="form-label">Rank</label>
                     <select class="form-control" id="rank_id" name="rank_id" required>
                         <option value="">Select Rank</option>
-                        @forelse ($ranks ?? [] as $rank)
-                                <option value="{{ $rank->id }}" {{ old('rank_id') == $rank->id ? 'selected' : '' }}>
-                                    {{ $rank->name }}
-                                </option>
-                        @empty
+                        @if($ranks && $ranks->isNotEmpty())
+                            @foreach ($ranks as $rank)
+                            <option value="{{ $rank->id }}" {{ old('rank_id') == $rank->id ? 'selected' : '' }}>
+                                {{ $rank->rank }}
+                            </option>
+                            @endforeach
+                        @else
                             <option value="">No ranks available for this department</option>
-                        @endforelse
+                        @endif
                     </select>
-
                 </div>
+                
+                
+
 
 
             <!-- Employee Photos -->

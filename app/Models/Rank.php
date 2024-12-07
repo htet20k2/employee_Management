@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rank extends Model
 {
-    public function department()
+    public function departments()
     {
-        return $this->belongsToMany(Department::class, 'department_details');
+        return $this->belongsToMany(Department::class, 'department_details', 'rank_id', 'department_id');
     }
 }

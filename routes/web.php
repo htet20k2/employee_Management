@@ -17,6 +17,8 @@ use App\Models\Rank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Exports\EmployeeDetailsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -60,7 +62,10 @@ Route::prefix('admin')->middleware('auth')->group(function(){
 
 
    
-
+    Route::get('/export-employee-details', function (\Illuminate\Http\Request $request) {
+        $filters = $request->only(['branch', 'department', 'duty', 'rank', 'is_training']);
+        return Excel::download(new EmployeeDetailsExport($filters), 'employee_details.xlsx');
+    })->name('employeeDetails.export');
 
 
 

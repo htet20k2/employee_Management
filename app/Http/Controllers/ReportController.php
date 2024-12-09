@@ -32,6 +32,11 @@ class ReportController extends Controller
         if ($request->filled('branch')) {
             $query->where('branch_id', $request->branch);
         }
+
+        if ($request->filled('department')) {
+            $query->where('department_id', $request->department);
+        }
+    
     
         if ($request->filled('duty')) {
             $query->where('duty_time_id', $request->duty);
@@ -45,12 +50,48 @@ class ReportController extends Controller
             $query->where('isTraining', $request->is_training === 'Yes' ? 1 : 0);
         }
 
-        
+
+           
+               // Initialize variables for departments and ranks
+               $departments = collect();
+               $ranks = collect(); // Make sure it's always a collection
+           
+               // Filter departments based on branch_id
+            //    if ($request->filled('branch_id')) {
+            //        $branch = Branch::with('departments')->find($request->branch_id);
+            //        $departments = $branch ? $branch->departments : collect();
+            //    }
+
+            if ($request->filled('branch_id')) {
+                $branch = Branch::with('departments')->find($request->branch_id);
+                $departments = $branch ? $branch->departments : collect();
+                // Debugging
+                if ($departments->isEmpty()) {
+                    \Log::info('No departments found for branch ID: ' . $request->branch_id);
+                }
+            }
+            
+           
+               // Filter ranks based on department_id
+               if ($request->filled('department_id')) {
+                   $department = Department::with('ranks')->find($request->department_id);
+                   $ranks = $department ? $department->ranks : collect(); // Always an empty collection if no ranks
+               }
+           
+
+
     
         // Fetch employee details with relationships
         $employeeDetails = $query->with(['branch', 'department', 'duties', 'rank'])->paginate(10);
     
-        return view('admin.report.index', compact('employeeDetails', 'branches', 'departments', 'ranks', 'duties'));
+        $uniqueEmployeeDetails = $query->get()
+        ->unique('department_id') // Ensure unique by department_id
+        ->values(); // Reset collection keys
+
+        $uniqueRankDetails = $query->get()
+        ->unique('rank_id') // Ensure unique by department_id
+        ->values(); // Reset collection keys
+        return view('admin.report.index', compact('employeeDetails', 'branches', 'departments', 'ranks', 'duties','uniqueEmployeeDetails','uniqueRankDetails'));
 
     }
     

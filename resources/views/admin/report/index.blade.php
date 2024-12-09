@@ -7,24 +7,35 @@
 
         <!-- Search Box -->
         <form method="get" action="{{ route('reports.index') }}" class="d-flex flex-wrap gap-3 row" id="searchForm">
-            <select name="branch" class="form-select col" id="branchSelect">
-                <option value="">Search Branch</option>
-                @foreach ($branches as $branch)
-                    <option value="{{ $branch->id }}" {{ request('branch') == $branch->id ? 'selected' : '' }}>
-                        {{ $branch->name }}
-                    </option>
-                @endforeach
-            </select>
+         
 
-            <select name="department" class="form-select col" id="departmentSelect">
-                <option value="">Search Department</option>
-                @foreach ($departments as $department)
-                    <option value="{{ $department->id }}" {{ request('department') == $department->id ? 'selected' : '' }}>
-                        {{ $department->name }}
-                    </option>
-                @endforeach
-            </select>
-            
+            <div class="form-group">
+                <label for="branch">Branch</label>
+                <select name="branch" id="branchSelect" class="form-control" onclick="this.form.submit()">
+                    <option value="">Select Branch</option>
+                    @foreach ($branches as $branch)
+                        <option value="{{ $branch->id }}" {{ request('branch') == $branch->id ? 'selected' : '' }}>
+                            {{ $branch->name }}
+                        </option>
+                    @endforeach
+                </select>
+                
+                
+            </div>
+
+            <div class="form-group">
+                <label for="department" class="form-label">Department</label>
+                <select class="form-control" id="department" name="department" onclick="this.form.submit()" >
+                    <option value="">Search Department</option>
+                    @forelse ($uniqueEmployeeDetails as $uniqueEmployeeDetail)
+                        <option value="{{ $uniqueEmployeeDetail->id }}" {{ request('department') == $uniqueEmployeeDetail->id ? 'selected' : '' }}>
+                            {{ $uniqueEmployeeDetail->department->name }}
+                        </option>
+                    @empty
+                        <option value="">No departments available for this branch</option>
+                    @endforelse
+                </select>
+            </div>
 
             <select name="duty" class="form-select col">
                 <option value="">Search Duty</option>
@@ -37,9 +48,9 @@
 
             <select name="rank" class="form-select col">
                 <option value="">Search Rank</option>
-                @foreach ($ranks as $rank)
-                    <option value="{{ $rank->id }}" {{ request('rank') == $rank->id ? 'selected' : '' }}>
-                        {{ $rank->rank }}
+                @foreach ($uniqueRankDetails as $uniqueRankDetail)
+                    <option value="{{ $uniqueRankDetail->id }}" {{ request('rank') == $uniqueRankDetail->id ? 'selected' : '' }}>
+                       {{ $uniqueRankDetail->rank->rank }}
                     </option>
                 @endforeach
             </select>
@@ -50,10 +61,16 @@
                 <option value="No" {{ request('is_training') == 'No' ? 'selected' : '' }}>No</option>
             </select>
 
-            <div class="col d-flex gap-2">
+            <div class="col d-flex gap-2 justify-center">
                 <button class="btn btn-primary" type="submit">Search</button>
                 <a href="{{ route('reports.index') }}" class="btn btn-secondary">Reset</a>
+                <a href="{{ route('employeeDetails.export', request()->all()) }}" class="btn btn-success ">
+                    Export 
+                </a>
             </div>
+
+          
+            
         </form>
     </div>
 

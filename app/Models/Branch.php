@@ -13,7 +13,10 @@ class Branch extends Model
     public function departments()
     {
         return $this->belongsToMany(Department::class, 'branch_details','branch_id','department_id');
+       // return $this->hasMany(Department::class, 'branch_details','branch_id','department_id');
     }
+
+
 
 
 

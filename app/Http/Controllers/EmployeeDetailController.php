@@ -78,40 +78,46 @@ class EmployeeDetailController extends Controller
         
     }
     
+    public function store(Request $request)
+    {
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'branch_id' => 'required|exists:branches,id',
+            'department_id' => 'required|exists:departments,id',
+            'rank_id' => 'required|exists:ranks,id',
+            'emp_photos' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'duty_status' => 'required|exists:duties,id',
+            'duty_time' => 'required|exists:duties,id',
+            'enroll_date' => 'required|date',
+            'permanent_date' => 'required|date',
+            'isTraining' => 'required|boolean',
+        ]);
     
-public function store(Request $request)
-{
-    
-    $validated = $request->validate([
-        'branch_id' => 'required|exists:branches,id',  
-        'department_id' => 'required|exists:departments,id', 
-        'rank_id' => 'required|exists:ranks,id',
-        'duty_status' => 'required',
-        'duty_time' => 'required',
-        'enroll_date' => 'required|date',
-        'permanent_date' => 'required|date',
-        'emp_photos' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
-
-    // Save Employee Details
-    try {
-        $employeeDetail = new EmployeeDetail($validated);
-
-        // Save Photo
+        // Handle the file upload
         if ($request->hasFile('emp_photos')) {
-            $filename = time() . '.' . $request->emp_photos->extension();
-            $request->emp_photos->move(public_path('images/employees'), $filename);
-            $employeeDetail->emp_photos = $filename;
+            $imageName = time() . '.' . $request->emp_photos->extension();
+            $request->emp_photos->move(public_path('uploads'), $imageName);
+        } else {
+            $imageName = null;
         }
-
-        $employeeDetail->save();
-        return redirect()->route('employeedetail.index')->with('success', 'Employee added successfully!');
-    } catch (\Exception $e) {
-        Log::error('Error creating employee: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'An error occurred while creating the employee.');
+    
+        // Store employee details in the database
+        EmployeeDetail::create([
+            'branch_id' => $request->branch_id,
+            'department_id' => $request->department_id,
+            'rank_id' => $request->rank_id,
+            'emp_photos' => $imageName,
+            'duty_status' => $request->duty_status,
+            'duty_time' => $request->duty_time,
+            'enroll_date' => $request->enroll_date,
+            'permanent_date' => $request->permanent_date,
+            'isTraining' => $request->isTraining,
+        ]);
+    
+        // Redirect to a specific rou_te or return a success message
+        return redirect()->route('employeedetail.index')->with('success', 'Employee detail created successfully!');
     }
-}
-
+    
  
     public function show(string $id)
     {

@@ -5,6 +5,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmployeeDetail extends Model
 {
+
+    protected $fillable = [
+        'branch_id', 'department_id', 'rank_id', 'emp_photos', 'duty_status', 
+        'duty_time', 'enroll_date', 'permanent_date', 'isTraining'
+    ];
+
     public function branch() {
         return $this->belongsTo(Branch::class, 'branch_id');
     }

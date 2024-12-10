@@ -48,7 +48,7 @@ class EmployeeDetailController extends Controller
     public function create(Request $request)
     {
         // Fetch all branches and other required models
-        $branches = Branch::all();
+        $branches = Branch::with('departments')->get(); // Eager load departments
         $dutytimes = Duty::all();
     
         // Initialize variables for departments and ranks
@@ -57,7 +57,7 @@ class EmployeeDetailController extends Controller
     
         // Filter departments based on branch_id
         if ($request->filled('branch_id')) {
-            $branch = Branch::with('departments')->find($request->branch_id);
+            $branch = $branches->find($request->branch_id); // Use already fetched branches
             $departments = $branch ? $branch->departments : collect();
         }
     
@@ -66,6 +66,8 @@ class EmployeeDetailController extends Controller
             $department = Department::with('ranks')->find($request->department_id);
             $ranks = $department ? $department->ranks : collect(); // Always an empty collection if no ranks
         }
+
+        // dd($request->all());
     
         // Pass data to the view
         return view('admin.employeedetails.create', compact(
@@ -74,42 +76,51 @@ class EmployeeDetailController extends Controller
             'ranks',
             'dutytimes'
         ));
-
+    }
+    
+    
+    public function store(Request $request)
+    {
+        // Validate incoming request
+        $validated = $request->validate([
+            'branch_id' => 'required|exists:branches,id',
+            'department_id' => 'required|exists:departments,id',
+            'rank_id' => 'required|exists:ranks,id',
+            'duty_time_id' => 'required|exists:duties,id',
+            'enroll_date' => 'required|date',
+            'permanent_date' => 'required|date',
+            'emp_photos' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
         
-    }
     
+        try {
+            $employeeDetail = new EmployeeDetail();
     
-public function store(Request $request)
-{
-    $validated = $request->validate([
-        'branch_id' => 'required|exists:branches,id',  // Ensure branch exists in the database
-        'department_id' => 'required|exists:departments,id',  // Ensure department exists
-        'rank_id' => 'required|exists:ranks,id',
-        'duty_status' => 'required',
-        'duty_time' => 'required',
-        'enroll_date' => 'required|date',
-        'permanent_date' => 'required|date',
-        'emp_photos' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
-
-    // Save Employee Details
-    try {
-        $employeeDetail = new EmployeeDetail($validated);
-
-        // Save Photo
-        if ($request->hasFile('emp_photos')) {
-            $filename = time() . '.' . $request->emp_photos->extension();
-            $request->emp_photos->move(public_path('images/employees'), $filename);
-            $employeeDetail->emp_photos = $filename;
+            $employeeDetail->branch_id = $validated['branch_id'];
+            $employeeDetail->department_id = $validated['department_id'];
+            $employeeDetail->rank_id = $validated['rank_id'];
+            $employeeDetail->duty_time_id = $validated['duty_time_id'];
+            $employeeDetail->enroll_date = $validated['enroll_date'];
+            $employeeDetail->permanent_date = $validated['permanent_date'];
+    
+            // Save Photo
+            if ($request->hasFile('emp_photos')) {
+                $filename = time() . '.' . $request->emp_photos->extension();
+                $request->emp_photos->move(public_path('images/employees'), $filename);
+                $employeeDetail->emp_photos = $filename;
+            }
+    
+            $employeeDetail->save();
+    
+            return redirect()->route('employeedetail.index')->with('success', 'Employee added successfully!');
+        } catch (\Exception $e) {
+            Log::error('Error creating employee: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while creating the employee.');
         }
-
-        $employeeDetail->save();
-        return redirect()->route('employeedetail.index')->with('success', 'Employee added successfully!');
-    } catch (\Exception $e) {
-        Log::error('Error creating employee: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'An error occurred while creating the employee.');
     }
-}
+    
+    
+    
 
  
     public function show(string $id)

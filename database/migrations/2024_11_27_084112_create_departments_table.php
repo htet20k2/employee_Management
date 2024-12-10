@@ -13,15 +13,11 @@ return new class extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
-            $table->String('name');
-            $table->Text('description')->nullable();
+            $table->string('name');
+            $table->text('description')->nullable();
             $table->timestamps();
-            $table->unsignedBigInteger('branch_id')->nullable(); // Add this if it doesn't exist
+            $table->unsignedBigInteger('branch_id')->nullable(); // Define branch_id only once
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
-            if (!Schema::hasColumn('departments', 'branch_id')) {
-                $table->unsignedBigInteger('branch_id')->nullable();
-                $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
-            }
         });
     }
 

@@ -35,25 +35,32 @@
                     @endforelse
                 </select>
             </div>
+
+            @if ($errors->any()) <div class="alert alert-danger"> <ul> @foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach </ul> </div> @endif
         </form>
 
         <!-- Main form for creating employee details -->
         <form method="POST" action="{{ route('employeedetail.store') }}" enctype="multipart/form-data">
             @csrf
 
-            <!-- Rank -->
-            <div class="mb-3">
-                <label for="rank_id" class="form-label">Rank</label>
-                <select class="form-control" id="rank_id" name="rank_id" required>
-                    <option value="">Select Rank</option>
-                    @foreach ($ranks as $rank)
-                        <option value="{{ $rank->id }}" {{ old('rank_id') == $rank->id ? 'selected' : '' }}>
-                            {{ $rank->rank }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
+        <!-- Hidden Inputs -->
+        <input type="hidden" name="branch_id" value="{{ request('branch_id') }}">
+        <input type="hidden" name="department_id" value="{{ request('department_id') }}">
+        <input type="hidden" name="branchdetail_id" value="{{ old('branchdetail_id', $branchdetail_id ?? '') }}">
+    
+        <!-- Rank -->
+        <div class="mb-3">
+            <label for="rank_id" class="form-label">Rank</label>
+            <select class="form-control" id="rank_id" name="rank_id" required>
+                <option value="">Select Rank</option>
+                @foreach ($ranks as $rank)
+                    <option value="{{ $rank->id }}" {{ old('rank_id') == $rank->id ? 'selected' : '' }}>
+                        {{ $rank->rank }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        
             <!-- Employee Photos -->
             <div class="mb-3">
                 <label for="emp_photos" class="form-label">Employee Photos</label>
@@ -62,7 +69,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-
+        
             <!-- Duty Status and Duty Time -->
             <div class="row">
                 <div class="mb-3 col">
@@ -76,20 +83,20 @@
                         @endforeach
                     </select>
                 </div>
-
+        
                 <div class="mb-3 col">
                     <label for="duty_time" class="form-label">Duty Time</label>
-                    <select class="form-control" id="duty_time" name="duty_time" required>
+                    <select class="form-control" id="duty_time" name="duty_time_id" required>
                         <option value="">Select Duty Time</option>
                         @foreach ($dutytimes as $dutytime)
-                            <option value="{{ $dutytime->id }}" {{ old('duty_time') == $dutytime->id ? 'selected' : '' }}>
+                            <option value="{{ $dutytime->id }}" {{ old('duty_time_id') == $dutytime->id ? 'selected' : '' }}>
                                 {{ $dutytime->duty }}
                             </option>
                         @endforeach
                     </select>
                 </div>
             </div>
-
+        
             <!-- Dates -->
             <div class="row">
                 <div class="mb-3 col">
@@ -99,7 +106,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
+        
                 <div class="mb-3 col">
                     <label for="permanent_date" class="form-label">Permanent Date</label>
                     <input type="date" class="form-control @error('permanent_date') is-invalid @enderror" id="permanent_date" name="permanent_date" value="{{ old('permanent_date') }}" required>
@@ -108,7 +115,7 @@
                     @enderror
                 </div>
             </div>
-
+        
             <!-- Is Training -->
             <div class="mb-3">
                 <label for="isTraining" class="form-label">Is Training</label>
@@ -118,6 +125,8 @@
                 </select>
             </div>
 
+            @if ($errors->any()) <div class="alert alert-danger"> <ul> @foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach </ul> </div> @endif
+        
             <!-- Submit Button -->
             <button type="submit" class="btn btn-success">Create Employee Detail</button>
         </form>

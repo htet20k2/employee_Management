@@ -18,8 +18,8 @@ class EmployeeDetailController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->input('search'); // Get search input.
-        $query = EmployeeDetail::query();   // Initialize the query builder.
+        $search = $request->input('search'); 
+        $query = EmployeeDetail::query();  
     
         // Include relationships in the query and filter with search.
         if (!empty($search)) {
@@ -53,7 +53,7 @@ class EmployeeDetailController extends Controller
     
         // Initialize variables for departments and ranks
         $departments = collect();
-        $ranks = collect(); // Make sure it's always a collection
+        $ranks = collect(); 
     
         // Filter departments based on branch_id
         if ($request->filled('branch_id')) {

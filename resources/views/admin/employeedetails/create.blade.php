@@ -1,14 +1,15 @@
 @extends('admin.home')
-
+ 
 @section('content')
 <div class="card card-custom my-4 border-0 shadow-sm">
     <div class="card-header bg-light">
         <h5 class="mb-3 md:mb-0">Create Employee Detail</h5>
     </div>
-
+ 
+ 
     <div class="card-body">
         <!-- Form for filtering departments by branch -->
-        {{-- <form method="GET" action="{{ route('employeedetail.create') }}">
+        <form method="GET" action="{{ route('employeedetail.create') }}">
             <div class="form-group">
                 <label for="branch">Branch</label>
                 <select name="branch_id" id="branch" class="form-control" required onchange="this.form.submit()">
@@ -20,7 +21,7 @@
                     @endforeach
                 </select>
             </div>
-
+ 
             <div class="form-group">
                 <label for="department_id" class="form-label">Department</label>
                 <select class="form-control" id="department" name="department_id" required onchange="this.form.submit()">
@@ -34,20 +35,19 @@
                     @endforelse
                 </select>
             </div>
-
+ 
             @if ($errors->any()) <div class="alert alert-danger"> <ul> @foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach </ul> </div> @endif
         </form>
-        </form> --}}
-
+ 
         <!-- Main form for creating employee details -->
         <form method="POST" action="{{ route('employeedetail.store') }}" enctype="multipart/form-data">
             @csrf
-
+ 
         <!-- Hidden Inputs -->
         <input type="hidden" name="branch_id" value="{{ request('branch_id') }}">
         <input type="hidden" name="department_id" value="{{ request('department_id') }}">
         <input type="hidden" name="branchdetail_id" value="{{ old('branchdetail_id', $branchdetail_id ?? '') }}">
-    
+   
         <!-- Rank -->
         <div class="mb-3">
             <label for="rank_id" class="form-label">Rank</label>
@@ -60,48 +60,7 @@
                 @endforeach
             </select>
         </div>
-        
-
-            <div class="form-group">
-                <label for="branch">Branch</label>
-                <select name="branch_id" id="branch_id" class="form-control" required onchange="this.form.submit()">
-                    <option value="">Select Branch</option>
-                    @foreach ($branches as $branch)
-                        <option value="{{ $branch->id }}" {{ old('branch_id', request('branch_id')) == $branch->id ? 'selected' : '' }}>
-                            {{ $branch->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="department_id" class="form-label">Department</label>
-                <select class="form-control" id="department_id" name="department_id" required onchange="this.form.submit()">
-                    <option value="">Select Department</option>
-                    @forelse ($departments as $department)
-                        <option  data-category="{{ $department->branch_id}}" value="{{ $department->id }}" {{ old('department_id', request('department_id')) == $department->id ? 'selected' : '' }}>
-                            {{ $department->name }}
-                        </option>
-                    @empty
-                        <option value="">No departments available for this branch</option>
-                    @endforelse
-                </select>
-            </div>
-
-            
-            <!-- Rank -->
-            <div class="mb-3">
-                <label for="rank_id" class="form-label">Rank</label>
-                <select class="form-control" id="rank_id" name="rank_id" required>
-                    <option value="">Select Rank</option>
-                    @foreach ($ranks as $rank)
-                        <option data-category="{{ $rank->department_id}}" value="{{ $rank->id }}" {{ old('rank_id') == $rank->id ? 'selected' : '' }}>
-                            {{ $rank->rank }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
+       
             <!-- Employee Photos -->
             <div class="mb-3">
                 <label for="emp_photos" class="form-label">Employee Photos</label>
@@ -110,7 +69,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-        
+       
             <!-- Duty Status and Duty Time -->
             <div class="row">
                 <div class="mb-3 col">
@@ -124,7 +83,7 @@
                         @endforeach
                     </select>
                 </div>
-        
+       
                 <div class="mb-3 col">
                     <label for="duty_time" class="form-label">Duty Time</label>
                     <select class="form-control" id="duty_time" name="duty_time_id" required>
@@ -137,7 +96,7 @@
                     </select>
                 </div>
             </div>
-        
+       
             <!-- Dates -->
             <div class="row">
                 <div class="mb-3 col">
@@ -147,7 +106,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-        
+       
                 <div class="mb-3 col">
                     <label for="permanent_date" class="form-label">Permanent Date</label>
                     <input type="date" class="form-control @error('permanent_date') is-invalid @enderror" id="permanent_date" name="permanent_date" value="{{ old('permanent_date') }}" required>
@@ -156,7 +115,7 @@
                     @enderror
                 </div>
             </div>
-        
+       
             <!-- Is Training -->
             <div class="mb-3">
                 <label for="isTraining" class="form-label">Is Training</label>
@@ -165,39 +124,25 @@
                     <option value="1" {{ old('isTraining') == 1 ? 'selected' : '' }}>Yes</option>
                 </select>
             </div>
-
+ 
             @if ($errors->any()) <div class="alert alert-danger"> <ul> @foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach </ul> </div> @endif
-        
+       
             <!-- Submit Button -->
             <button type="submit" class="btn btn-success">Create Employee Detail</button>
         </form>
     </div>
+ 
+    <script>
+    document.getElementById('branch').addEventListener('change', function () {
+        const branchId = this.value;
+        fetch(`{{ route('employeedetail.create') }}?branch_id=${branchId}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('department').innerHTML = html; // Update departments dynamically
+            });
+    });
+ 
+    </script>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const branchSelect = document.getElementById('branch_id');
-    const departmentSelect = document.getElementById('department_id');
-
-    function filterDepartments() {
-        const selectedBranch = branchSelect.value;
-        const departmentOptions = departmentSelect.querySelectorAll('option[data-category]');
-
-        departmentOptions.forEach(option => {
-            if (option.getAttribute('data-category') === selectedBranch || selectedBranch === '') {
-                option.style.display = 'block'; // Show relevant departments
-            } else {
-                option.style.display = 'none'; // Hide irrelevant departments
-            }
-        });
-
-        // Reset department selection to default
-        departmentSelect.value = '';
-    }
-
-    branchSelect.addEventListener('change', filterDepartments);
-});
-
-</script>
-
 @endsection
+ 

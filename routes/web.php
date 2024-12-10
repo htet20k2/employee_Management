@@ -61,11 +61,17 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::resource('/details',DetailController::class);
 
 
+    // routes/web.php
+    Route::get('employeedetail/create', [EmployeeDetailController::class, 'create'])->name('employeedetail.create');
+    Route::post('employeedetail/store', [EmployeeDetailController::class, 'store'])->name('employeedetail.store');
+
+
+
    
-    Route::get('/export-employee-details', function (\Illuminate\Http\Request $request) {
-        $filters = $request->only(['branch', 'department', 'duty', 'rank', 'is_training']);
-        return Excel::download(new EmployeeDetailsExport($filters), 'employee_details.xlsx');
-    })->name('employeeDetails.export');
+    // Route::get('/export-employee-details', function (\Illuminate\Http\Request $request) {
+    //     $filters = $request->only(['branch', 'department', 'duty', 'rank', 'is_training']);
+    //     return Excel::download(new EmployeeDetailsExport($filters), 'employee_details.xlsx');
+    // })->name('employeeDetails.export');
 
 
 

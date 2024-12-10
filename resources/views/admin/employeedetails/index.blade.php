@@ -53,7 +53,7 @@
                             <td>{{ ($employeeDetails->currentPage() - 1) * $employeeDetails->perPage() + $loop->index + 1 }}</td>
                             <td>
                                 @if ($employeeDetail->emp_photos)
-                                <img src="{{ asset('images/' . $employeeDetail->emp_photos) }}" alt="Employee Photo" width="50">
+                                <img src="{{ asset('images/employees/' . $employeeDetail->emp_photos) }}" alt="Employee Photo" width="50">
                                     @else
                                         No Image
                                     @endif

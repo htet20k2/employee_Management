@@ -132,17 +132,7 @@
         </form>
     </div>
  
-    <script>
-    document.getElementById('branch').addEventListener('change', function () {
-        const branchId = this.value;
-        fetch(`{{ route('employeedetail.create') }}?branch_id=${branchId}`)
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('department').innerHTML = html; // Update departments dynamically
-            });
-    });
- 
-    </script>
+
 </div>
 @endsection
  

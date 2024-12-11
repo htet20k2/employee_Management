@@ -103,7 +103,7 @@
                         <td>{{ $employeedetail->id }}</td>
                         <td>
                             @if ($employeedetail->emp_photos)
-                                <img src="{{ asset('images/' . $employeedetail->emp_photos) }}" alt="Employee Photo" width="50">
+                                <img src="{{ asset('images/employees/'. $employeedetail->emp_photos) }}" alt="Employee Photo" width="50">
                             @else
                                 No Image
                             @endif

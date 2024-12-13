@@ -68,10 +68,10 @@ Route::prefix('admin')->middleware('auth')->group(function(){
 
 
    
-    // Route::get('/export-employee-details', function (\Illuminate\Http\Request $request) {
-    //     $filters = $request->only(['branch', 'department', 'duty', 'rank', 'is_training']);
-    //     return Excel::download(new EmployeeDetailsExport($filters), 'employee_details.xlsx');
-    // })->name('employeeDetails.export');
+    Route::get('/export-employee-details', function (\Illuminate\Http\Request $request) {
+        $filters = $request->only(['branch', 'department', 'duty', 'rank', 'is_training']);
+        return Excel::download(new EmployeeDetailsExport($filters), 'employee_details.xlsx');
+    })->name('employeeDetails.export');
 
 
 

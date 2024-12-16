@@ -42,4 +42,7 @@ class EmployeeDetail extends Model
     {
         return $this->hasMany(Transfer::class, 'employee_detail_id');
     }
+
+    
+    
 }

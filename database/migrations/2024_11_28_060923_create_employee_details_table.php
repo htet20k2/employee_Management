@@ -28,10 +28,7 @@ return new class extends Migration
             $table->foreign('duty_time_id')->references('id')->on('duties')->onDelete('cascade'); 
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
+    
     public function down(): void
     {
         Schema::dropIfExists('employee_details');

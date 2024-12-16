@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\EmployeeDetail;
 use App\Http\Requests\StoreEmployeeDetailRequest;
 use App\Http\Requests\UpdateEmployeeDetailRequest;
@@ -110,8 +109,6 @@ class EmployeeDetailController extends Controller
     
     
     
-
- 
     public function show(string $id)
     {
         return view('admin.employeedetails.show', compact('employeedetail'));
@@ -180,14 +177,8 @@ public function update($id, Request $request)
 
 
     if ($request->hasFile('emp_photos')) {
-        if ($employeeDetail->emp_photos && file_exists(public_path('images/employees'. $employeeDetail->emp_photos))) {
-            unlink(public_path('images/employees'. $employeeDetail->emp_photos));
-        }
-
-        if ($request->hasFile('emp_photos')) {
-            $filename = time() . '.' . $request->emp_photos->extension();
-            $request->emp_photos->move(public_path('images/employees'), $filename);
-            $employeeDetail->emp_photos = $filename;
+        if ($employeeDetail->emp_photos && file_exists(public_path('images/employees' . $employeeDetail->emp_photos))) {
+            unlink(public_path('images/employees' . $employeeDetail->emp_photos));
         }
 
         $imgName = time() . '.' . $request->emp_photos->extension();

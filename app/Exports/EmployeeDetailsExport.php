@@ -5,12 +5,12 @@ namespace App\Exports;
 use App\Models\EmployeeDetail;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class EmployeeDetailsExport implements FromQuery, WithHeadings
+class EmployeeDetailsExport implements FromQuery, WithHeadings, WithMapping
 {
     protected $filters;
 
-    // Constructor to pass filters
     public function __construct($filters)
     {
         $this->filters = $filters;
@@ -44,7 +44,21 @@ class EmployeeDetailsExport implements FromQuery, WithHeadings
         return $query->with(['branch', 'department', 'duties', 'rank']);
     }
 
-    // Define column headings for Excel
+    public function map($employee): array
+    {
+        return [
+            $employee->id,
+            $employee->branch->name ?? 'N/A',
+            $employee->department->name ?? 'N/A',
+            $employee->duties->status ?? 'N/A',
+            $employee->duties->duty ?? 'N/A',
+            $employee->rank->rank ?? 'N/A',
+            $employee->enroll_date,
+            $employee->permanent_date,
+            $employee->isTraining ? 'Yes' : 'No',
+        ];
+    }
+
     public function headings(): array
     {
         return [
@@ -57,6 +71,7 @@ class EmployeeDetailsExport implements FromQuery, WithHeadings
             'Enroll Date',
             'Permanent Date',
             'Is Training',
+
         ];
     }
 }

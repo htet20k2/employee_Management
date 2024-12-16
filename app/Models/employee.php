@@ -41,4 +41,9 @@ class employee extends Model
     public const STATUS_OPTIONS = ['Active', 'Inactive', 'On Leave', 'Terminated', 'Suspended'];
     public const MARTIAL_STATUS_OPTIONS = ['Single', 'Married', 'Divorced'];
     public const BLOOD_TYPE_OPTIONS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
+    public function transfers()
+    {
+        return $this->hasMany(Transfer::class, 'employee_id');
+    }
 }

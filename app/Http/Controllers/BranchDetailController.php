@@ -58,7 +58,7 @@ class BranchDetailController extends Controller
         $branchDetail->save();
 
 
-        return redirect()->route('branchdetails.index')->with('success', 'Branch Detail added successfully.');
+        return redirect()->route('branchdetail.index')->with('success', 'Branch Detail added successfully.');
     }
 
     public function show(string $id)

@@ -44,7 +44,6 @@ class EmployeeDetailsExport implements FromQuery, WithHeadings, WithMapping
         return $query->with(['branch', 'department', 'duties', 'rank']);
     }
 
-    // Map data to headings
     public function map($employee): array
     {
         return [
@@ -60,7 +59,6 @@ class EmployeeDetailsExport implements FromQuery, WithHeadings, WithMapping
         ];
     }
 
-    // Define column headings for Excel
     public function headings(): array
     {
         return [
@@ -73,6 +71,7 @@ class EmployeeDetailsExport implements FromQuery, WithHeadings, WithMapping
             'Enroll Date',
             'Permanent Date',
             'Is Training',
+
         ];
     }
 }

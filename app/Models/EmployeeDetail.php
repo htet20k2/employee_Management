@@ -38,4 +38,8 @@ class EmployeeDetail extends Model
         return $this->belongsTo(BranchDetail::class, 'departmentdetail_id');
     }
 
+    public function transfers()
+    {
+        return $this->hasMany(Transfer::class, 'employee_detail_id');
+    }
 }

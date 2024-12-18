@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('employee_details', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('employee_id')->nullable(false);
             $table->unsignedBigInteger('branch_id');         
             $table->unsignedBigInteger('department_id');         
             $table->unsignedBigInteger('duty_time_id');         
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->boolean('isTraining')->default(false);
             $table->string('permanent_date')->nullable();
             $table->string('emp_photos', 255)->nullable();
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
             $table->foreign('rank_id')->references('id')->on('ranks')->onDelete('cascade');

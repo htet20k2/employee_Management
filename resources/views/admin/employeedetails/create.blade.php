@@ -6,7 +6,6 @@
         <h5 class="mb-3 md:mb-0">Create Employee Detail</h5>
     </div>
  
- 
     <div class="card-body">
         <!-- Form for filtering departments by branch -->
         <form method="GET" action="{{ route('employeedetail.create') }}">
@@ -47,6 +46,7 @@
         <input type="hidden" name="branch_id" value="{{ request('branch_id') }}">
         <input type="hidden" name="department_id" value="{{ request('department_id') }}">
         <input type="hidden" name="branchdetail_id" value="{{ old('branchdetail_id', $branchdetail_id ?? '') }}">
+
    
         <!-- Rank -->
         <div class="mb-3">
@@ -60,7 +60,17 @@
                 @endforeach
             </select>
         </div>
-       
+
+        <select class="form-control" id="employee_id" name="employee_id" required>
+            <option value="">Select Employee</option>
+            @foreach ($employees as $employee)
+                <option value="{{ $employee->id }}" {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
+                    {{ $employee->name }}
+                </option>
+            @endforeach
+        </select>
+        
+        
             <!-- Employee Photos -->
             <div class="mb-3">
                 <label for="emp_photos" class="form-label">Employee Photos</label>

@@ -6,6 +6,8 @@ use App\Http\Requests\StoreEmployeeDetailRequest;
 use App\Http\Requests\UpdateEmployeeDetailRequest;
 use App\Models\Branch;
 use App\Models\Department;
+use App\Models\Employee;
+use App\Models\BranchDetail;
 use App\Models\Duty;
 use App\Models\Rank;
 use Illuminate\Http\Request;
@@ -29,10 +31,13 @@ class EmployeeDetailController extends Controller
             })
             ->orWhereHas('rank', function ($q) use ($search) {
                 $q->where('rank', 'like', "%{$search}%");
+            })
+            ->orWhereHas('employee', function ($q) use ($search) {
+                $q->where('employee', 'like', "%{$search}%");
             });
         }
     
-        $employeeDetails = $query->with(['branch', 'department', 'duties', 'rank'])
+        $employeeDetails = $query->with(['branch', 'department', 'duties', 'rank','employee'])
                                  ->paginate(10);
     
         return view('admin.employeedetails.index', compact('employeeDetails'));
@@ -43,13 +48,13 @@ class EmployeeDetailController extends Controller
     
     public function create(Request $request)
     {
-
         $branches = Branch::with('departments')->get();
         $dutytimes = Duty::all();
+        $employees = Employee::all();
     
         $departments = collect();
-        $ranks = collect(); 
-    
+        $ranks = collect();
+        
         if ($request->filled('branch_id')) {
             $branch = $branches->find($request->branch_id);
             $departments = $branch ? $branch->departments : collect();
@@ -59,49 +64,68 @@ class EmployeeDetailController extends Controller
             $department = Department::with('ranks')->find($request->department_id);
             $ranks = $department ? $department->ranks : collect();
         }
-
+    
         return view('admin.employeedetails.create', compact(
             'branches',
             'departments',
             'ranks',
-            'dutytimes'
+            'dutytimes',
+            'employees',
+
         ));
     }
     
     
     public function store(Request $request)
     {
+        // Log the incoming request to check if the data is correct
+        Log::info($request->all());
+    
+        // Validate the incoming request data
         $validated = $request->validate([
-            'branch_id' => 'required|exists:branches,id',
-            'department_id' => 'required|exists:departments,id',
-            'rank_id' => 'required|exists:ranks,id',
-            'duty_time_id' => 'required|exists:duties,id',
+
+            
+            'branch_id' => 'required|exists:branches,id', 
+            'department_id' => 'required|exists:departments,id', 
+            'rank_id' => 'required|exists:ranks,id',  
+            'duty_time_id' => 'required|exists:duties,id', 
             'enroll_date' => 'required|date',
             'permanent_date' => 'required|date',
             'emp_photos' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'isTraining' => 'required|boolean',
         ]);
-        
+    
+        // Debugging step to log validated data
+        Log::info('Validated data: ', $validated);
     
         try {
+            // Create the new EmployeeDetail entry
             $employeeDetail = new EmployeeDetail();
     
+            // Set attributes from validated data
+            $employeeDetail->employee_id = $validated['employee_id'];
             $employeeDetail->branch_id = $validated['branch_id'];
             $employeeDetail->department_id = $validated['department_id'];
             $employeeDetail->rank_id = $validated['rank_id'];
             $employeeDetail->duty_time_id = $validated['duty_time_id'];
             $employeeDetail->enroll_date = $validated['enroll_date'];
             $employeeDetail->permanent_date = $validated['permanent_date'];
+            $employeeDetail->isTraining = $validated['isTraining'];
     
+            // Handle file upload for employee photos
             if ($request->hasFile('emp_photos')) {
                 $filename = time() . '.' . $request->emp_photos->extension();
                 $request->emp_photos->move(public_path('images/employees'), $filename);
                 $employeeDetail->emp_photos = $filename;
             }
     
+            // Save the employee detail
             $employeeDetail->save();
     
+            // Redirect with success message
             return redirect()->route('employeedetail.index')->with('success', 'Employee added successfully!');
         } catch (\Exception $e) {
+            // Log the error and return with an error message
             Log::error('Error creating employee: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while creating the employee.');
         }
@@ -122,6 +146,7 @@ class EmployeeDetailController extends Controller
 
                 $branches = Branch::with('departments')->get(); 
                 $dutytimes = Duty::all();
+                $employees = Employee::all();
             
                 $departments = collect();
                 $ranks = collect(); 
@@ -143,6 +168,7 @@ class EmployeeDetailController extends Controller
                     'departments',
                     'ranks',
                     'dutytimes',
+                    'employees',
                     'employeedetail'
                 ));
 
@@ -153,6 +179,7 @@ class EmployeeDetailController extends Controller
 public function update($id, Request $request)
 {
     $validated = $request->validate([
+        'employee_id' => 'exists:employees,id',
         'branch_id' => 'required|exists:branches,id',
         'department_id' => 'required|exists:departments,id',
         'rank_id' => 'required|exists:ranks,id',
@@ -160,6 +187,7 @@ public function update($id, Request $request)
         'enroll_date' => 'required|date',
         'permanent_date' => 'required|date',
         'emp_photos' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'isTraining' => 'required|boolean',
     ]);
 
     $employeeDetail = EmployeeDetail::find($id);
@@ -168,12 +196,14 @@ public function update($id, Request $request)
         return redirect()->route('employeedetail.index')->with('error', 'Employee not found.');
     }
 
+    $employeeDetail->employee_id = $validated['employee_id'];
     $employeeDetail->branch_id = $validated['branch_id'];
     $employeeDetail->department_id = $validated['department_id'];
     $employeeDetail->rank_id = $validated['rank_id'];
     $employeeDetail->duty_time_id = $validated['duty_time_id'];
     $employeeDetail->enroll_date = $validated['enroll_date'];
     $employeeDetail->permanent_date = $validated['permanent_date'];
+    $employeeDetail->isTraining = $validated['isTraining'];
 
 
     if ($request->hasFile('emp_photos')) {
@@ -185,8 +215,6 @@ public function update($id, Request $request)
         $request->emp_photos->move(public_path('images/employees'), $imgName);
         $employeeDetail->emp_photos = $imgName;
     }
-
-    $employeeDetail->update();
 
     if ($employeeDetail->update()) {
         return redirect()->route('employeedetail.index')->with('success', 'Employee Detail updated successfully.');

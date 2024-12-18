@@ -61,6 +61,19 @@
                 @endforeach
             </select>
         </div>
+
+        <div class="row">
+            <div class="mb-3 col">
+                <label for="employee_id" class="form-label">Employee</label>
+                <select class="form-control" id="employee" name="employee_id" required>
+                    <option value="">Select Employee</option>
+                    @foreach ($employees as $employee)
+                        <option value="{{ $employee->id }}" {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
+                            {{ $employee->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
        
             <!-- Employee Photos -->
             <div class="mb-3">

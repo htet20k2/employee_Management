@@ -36,6 +36,7 @@
                     <tr>
                         <th>No</th>
                         <th>Image</th>
+                        <th>Employee</th>
                         <th>Branch Name</th>
                         <th>Department Name</th>
                         <th>Duty Status</th>
@@ -58,6 +59,7 @@
                                         No Image
                                     @endif
                             </td>
+                            <td>{{ $employeeDetail->employee->name }}</td>
                             <td>{{ $employeeDetail->branch->name }}</td>
                             <td>{{ $employeeDetail->department->name }}</td>
                             <td>{{ $employeeDetail->duties->status }}</td>

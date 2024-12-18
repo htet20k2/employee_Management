@@ -8,7 +8,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\TrnasferController;
+use App\Http\Controllers\TransferController;
 use App\Http\Controllers\EmployeeDetailController;
 use App\Http\Controllers\BranchDetailController;
 use App\Http\Controllers\DepartmentDetailController;
@@ -53,7 +53,7 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::resource('/employeedetail',EmployeeDetailController::class);
 
     // transfer 
-    Route::resource('/transfer',TransferController::class);
+    Route::resource('/transfers',TransferController::class);
     
     // branchdetail 
     Route::resource('/branchdetail',BranchDetailController::class);

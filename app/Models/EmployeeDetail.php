@@ -7,7 +7,7 @@ class EmployeeDetail extends Model
 {
 
     protected $fillable = [
-        'branch_id', 'department_id', 'rank_id', 'emp_photos', 'duty_status', 
+        'employee_id','branch_id', 'department_id', 'rank_id', 'emp_photos', 'duty_status', 
         'duty_time', 'enroll_date', 'permanent_date', 'isTraining'
     ];
 
@@ -36,6 +36,11 @@ class EmployeeDetail extends Model
     public function departmentdetail()
     {
         return $this->belongsTo(BranchDetail::class, 'departmentdetail_id');
+    }
+
+    public function employees()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
     }
 
     public function transfers()

@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::create('transfers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employee_id'); // This should match the column in the 'transfers' table
+            $table->unsignedBigInteger('employee_id');
             $table->unsignedBigInteger('branch_id');
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('rank_id');

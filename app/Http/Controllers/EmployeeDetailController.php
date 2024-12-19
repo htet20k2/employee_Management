@@ -32,12 +32,12 @@ class EmployeeDetailController extends Controller
             ->orWhereHas('rank', function ($q) use ($search) {
                 $q->where('rank', 'like', "%{$search}%");
             })
-            ->orWhereHas('employee', function ($q) use ($search) {
-                $q->where('employee', 'like', "%{$search}%");
+            ->orWhereHas('employees', function ($q) use ($search) {
+                $q->where('employees', 'like', "%{$search}%");
             });
         }
     
-        $employeeDetails = $query->with(['branch', 'department', 'duties', 'rank','employee'])
+        $employeeDetails = $query->with(['branch', 'department', 'duties', 'rank','employees'])
                                  ->paginate(10);
     
         return view('admin.employeedetails.index', compact('employeeDetails'));
@@ -78,13 +78,13 @@ class EmployeeDetailController extends Controller
     
     public function store(Request $request)
     {
+
         // Log the incoming request to check if the data is correct
         Log::info($request->all());
     
         // Validate the incoming request data
         $validated = $request->validate([
-
-            
+            'employee_id' => 'required|exists:employees,employee_id', 
             'branch_id' => 'required|exists:branches,id', 
             'department_id' => 'required|exists:departments,id', 
             'rank_id' => 'required|exists:ranks,id',  
@@ -97,8 +97,11 @@ class EmployeeDetailController extends Controller
     
         // Debugging step to log validated data
         Log::info('Validated data: ', $validated);
+
     
+
         try {
+
             // Create the new EmployeeDetail entry
             $employeeDetail = new EmployeeDetail();
     
@@ -111,6 +114,8 @@ class EmployeeDetailController extends Controller
             $employeeDetail->enroll_date = $validated['enroll_date'];
             $employeeDetail->permanent_date = $validated['permanent_date'];
             $employeeDetail->isTraining = $validated['isTraining'];
+
+
     
             // Handle file upload for employee photos
             if ($request->hasFile('emp_photos')) {
@@ -118,13 +123,22 @@ class EmployeeDetailController extends Controller
                 $request->emp_photos->move(public_path('images/employees'), $filename);
                 $employeeDetail->emp_photos = $filename;
             }
+
     
+            try{
+                $employeeDetail->save();
+
+            }catch(Exception $e){
+                dd($e);
+            }
+
             // Save the employee detail
-            $employeeDetail->save();
+
     
             // Redirect with success message
             return redirect()->route('employeedetail.index')->with('success', 'Employee added successfully!');
         } catch (\Exception $e) {
+            dd($e);
             // Log the error and return with an error message
             Log::error('Error creating employee: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while creating the employee.');

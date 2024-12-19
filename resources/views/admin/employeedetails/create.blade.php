@@ -64,7 +64,7 @@
         <select class="form-control" id="employee_id" name="employee_id" required>
             <option value="">Select Employee</option>
             @foreach ($employees as $employee)
-                <option value="{{ $employee->id }}" {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
+                <option value="{{ $employee->employee_id }}" {{ old('employee_id') == $employee->employee_id ? 'selected' : '' }}>
                     {{ $employee->name }}
                 </option>
             @endforeach

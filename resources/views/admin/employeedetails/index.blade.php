@@ -59,7 +59,7 @@
                                         No Image
                                     @endif
                             </td>
-                            <td>{{ $employeeDetail->employee->name }}</td>
+                            <td>{{ $employeeDetail->employees->name }}</td>
                             <td>{{ $employeeDetail->branch->name }}</td>
                             <td>{{ $employeeDetail->department->name }}</td>
                             <td>{{ $employeeDetail->duties->status }}</td>

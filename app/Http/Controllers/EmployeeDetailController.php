@@ -193,7 +193,7 @@ class EmployeeDetailController extends Controller
 public function update($id, Request $request)
 {
     $validated = $request->validate([
-        'employee_id' => 'exists:employees,id',
+        'employee_id' => 'exists:employees,employee_id',
         'branch_id' => 'required|exists:branches,id',
         'department_id' => 'required|exists:departments,id',
         'rank_id' => 'required|exists:ranks,id',

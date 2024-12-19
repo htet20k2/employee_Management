@@ -5,42 +5,48 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use App\Models\Department;
 use App\Models\Rank;
-use App\Models\Employee;
+use App\Models\EmployeeDetail;
 use App\Models\Transfer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TransferController extends Controller
 {
     public function index()
     {
-
-        $transfers = Transfer::with(['employee', 'branch', 'department', 'rank'])->paginate(10);
+        $transfers = Transfer::with(['employeeDetail', 'branch', 'department', 'rank'])->paginate(10);
         return view('admin.transfer.index', compact('transfers'));
     }
 
     public function create(Request $request)
     {
-
         $branches = Branch::with('departments')->get();
-        $employees = Employee::all();
+        $employeeDetails = EmployeeDetail::with(['branch', 'department'])->get();
         $departments = collect();
-        $ranks = collect(); 
-    
+        $ranks = collect();
+        $selectedEmployeeDetail = null;
+
         if ($request->filled('branch_id')) {
             $branch = $branches->find($request->branch_id);
             $departments = $branch ? $branch->departments : collect();
         }
-    
+
         if ($request->filled('department_id')) {
             $department = Department::with('ranks')->find($request->department_id);
             $ranks = $department ? $department->ranks : collect();
+        }
+
+        if ($request->filled('employee_detail_id')) {
+            $selectedEmployeeDetail = EmployeeDetail::with(['branch', 'department'])
+                ->findOrFail($request->employee_detail_id);
         }
 
         return view('admin.transfer.create', compact(
             'branches',
             'departments',
             'ranks',
-            'employees'
+            'employeeDetails',
+            'selectedEmployeeDetail'
         ));
     }
 
@@ -48,30 +54,42 @@ class TransferController extends Controller
     {
 
         $validated = $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'branch_id' => 'required|exists:branches,id',
-            'department_id' => 'required|exists:departments,id',
+            'employee_detail_id' => 'required|exists:employee_details,id',
+            'to_branch' => 'required|exists:branches,id',
+            'to_department' => 'required|exists:departments,id',
             'rank_id' => 'required|exists:ranks,id',
             'transfer_date' => 'required|date',
             'status' => 'required|string|max:255',
         ]);
-
-        try {
-            $transfers = new Transfer();
     
-            $transfers->employee_id = $validated['employee_id'];
-            $transfers->branch_id = $validated['branch_id'];
-            $transfers->department_id = $validated['department_id'];
-            $transfers->rank_id = $validated['rank_id'];
-            $transfers->transfer_date = $validated['transfer_date'];
-            $transfers->status = $validated['status'];
-            $transfers->save();
+        $employeeDetail = EmployeeDetail::findOrFail($validated['employee_detail_id']);
+    
+        if (
+            $employeeDetail->branch_id != $request->input('from_branch') ||
+            $employeeDetail->department_id != $request->input('from_department')
+        ) {
+            return redirect()->back()->withErrors(['error' => 'The selected From Branch or From Department does not match the employee\'s current details.']);
+        }
+    
+        try {
+            Transfer::create([
+                'employee_detail_id' => $validated['employee_detail_id'],
+                'branch_id' => $validated['to_branch'],
+                'department_id' => $validated['to_department'],
+                'rank_id' => $validated['rank_id'],
+                'transfer_date' => $validated['transfer_date'],
+                'status' => $validated['status'],
+            ]);
+    
             return redirect()->route('transfers.index')->with('success', 'Employee transfer history created successfully.');
         } catch (\Exception $e) {
-            Log::error('Error creating transfer: ' . $e->getMessage());
+            \Log::error('Error creating transfer: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while creating the transfer.');
         }
     }
+    
+
+
 
     public function edit($id, Request $request)
     {
@@ -104,7 +122,7 @@ class TransferController extends Controller
     {
 
         $validated = $request->validate([
-            'employee_id' => 'required|exists:employees,id',
+            'employee_detail_id' => 'required|exists:employee_details,id',
             'branch_id' => 'required|exists:branches,id',
             'department_id' => 'required|exists:departments,id',
             'rank_id' => 'required|exists:ranks,id',

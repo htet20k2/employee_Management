@@ -45,9 +45,13 @@ class EmployeeDetail extends Model
 
     public function transfers()
     {
-        return $this->hasMany(Transfer::class, 'employee_detail_id');
+        return $this->hasMany(Transfer::class);
     }
 
     
     
 }
+
+
+
+    

@@ -54,6 +54,10 @@
         <form method="POST" action="{{ route('transfers.store') }}">
             @csrf
 
+            <input type="text" name="employee_detail_id" value="{{ request('employee_detail_id') }}" hidden>
+            <input type="text" name="branch_id" value="{{request('branch_id')}}" hidden >
+            <input type="text" name="department_id" value="{{request('department_id')}}" hidden >
+
             @if ($selectedEmployeeDetail)
                 <div class="form-group mt-3">
                     <label for="from_branch">From Branch</label>
@@ -69,7 +73,7 @@
 
             <div class="form-group mt-3">
                 <label for="rank">Rank</label>
-                <select name="rank" class="form-control" required>
+                <select name="rank_id" class="form-control" required>
                     <option value="">Select Rank</option>
                     @foreach ($ranks as $rank)
                         <option value="{{ $rank->id }}">{{ $rank->name }}</option>

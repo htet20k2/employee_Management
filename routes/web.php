@@ -8,6 +8,10 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\PayCodeController;
+use App\Http\Controllers\HolidayController;
+use App\Http\Controllers\LateController;
+use App\Http\Controllers\CasualController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\EmployeeDetailController;
 use App\Http\Controllers\BranchDetailController;
@@ -60,6 +64,18 @@ Route::prefix('admin')->middleware('auth')->group(function(){
 
     // departmentdetail 
     Route::resource('/departmentdetail',DepartmentDetailController::class);
+
+    //paycode
+    Route::resource('/paycodes',PayCodeController::class);
+
+    //holiday
+    Route::resource('/holidays',HolidayController::class);
+
+    //late
+    Route::resource('/lates',LateController::class);
+
+    //Casual
+    Route::resource('/casuals',CasualController::class);
 
     // report 
     Route::resource('/reports',ReportController::class);

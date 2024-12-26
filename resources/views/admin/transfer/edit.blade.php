@@ -7,54 +7,93 @@
         </div>
 
         <div class="card-body">
-            <form method="POST" action="{{ route('transfers.update', $transfer->id) }}">
+
+        <form method="GET" action="{{ route('transfers.edit',$transfers->id ?? '') }}">
+            <div class="form-group">
+                <label for="employee_detail_id">Employee</label>
+                <select name="employee_detail_id" class="form-control" required onchange="this.form.submit()">
+                    <option value="">Select Employee</option>
+                    @foreach ($employeeDetails as $detail)
+                        <option value="{{ $detail->id }}" {{ request('employee_detail_id') == $detail->id ? 'selected' : '' }}>
+                            {{ optional($detail->employees)->name ?? 'No Name' }} 
+                            (Branch: {{ optional($detail->branch)->name ?? 'No Branch' }}, 
+                            Department: {{ optional($detail->department)->name ?? 'No Department' }})
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+                        
+            <div class="form-group">
+                <label for="branch">To Branch</label>
+                <select name="branch_id" id="branch" class="form-control" required onchange="this.form.submit()">
+                    <option value="">Select Branch</option>
+                    @foreach ($branches as $branch)
+                        <option value="{{ $branch->id }}" {{ old('branch_id', request('branch_id')) == $branch->id ? 'selected' : '' }}>
+                            {{ $branch->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+        <div class="form-group">
+            <label for="department_id" class="form-label">Department</label>
+            <select class="form-control" id="department" name="department_id" required onchange="this.form.submit()">
+                <option value="">To Department</option>
+                @forelse ($departments as $department)
+                    <option value="{{ $department->id }}" {{ old('department_id', request('department_id')) == $department->id ? 'selected' : '' }}>
+                        {{ $department->name }}
+                    </option>
+                @empty
+                    <option value="">No departments available for this branch</option>
+                @endforelse
+            </select>
+        </div>
+        </form>
+
+
+            <form method="POST" action="{{ route('transfers.update', $transfers->id) }}">
                 @csrf
                 @method('PUT')
-                <div class="form-group">
-                    <label for="employee_id">Employee</label>
-                    <select name="employee_id" class="form-control" required>
-                        <option value="">Select Employee</option>
-                        @foreach ($employees as $employee)
-                            <option value="{{ $employee->id }}" {{ $transfer->employee_id == $employee->id ? 'selected' : '' }}>{{ $employee->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="branch_id">Branch</label>
-                    <select name="branch_id" class="form-control" required>
-                        <option value="">Select Branch</option>
-                        @foreach ($branches as $branch)
-                            <option value="{{ $branch->id }}" {{ $transfer->branch_id == $branch->id ? 'selected' : '' }}>{{ $branch->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="department_id">Department</label>
-                    <select name="department_id" class="form-control" required>
-                        <option value="">Select Department</option>
-                        @foreach ($departments as $department)
-                            <option value="{{ $department->id }}" {{ $transfer->department_id == $department->id ? 'selected' : '' }}>{{ $department->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="rank_id">Rank</label>
-                    <select name="rank_id" class="form-control" required>
+
+
+
+                <input type="hidden" name="employee_detail_id" value="{{ $transfer->employee_detail_id }}">
+                <input type="hidden" name="branch_id" value="{{ $transfer->branch_id }}">
+                <input type="hidden" name="department_id" value="{{ $transfer->department_id }}">
+
+                <div class="form-group mt-3">
+                    <label for="rank">Rank</label>
+                    <select name="rank_id" class="form-control @error('rank_id') is-invalid @enderror" required>
                         <option value="">Select Rank</option>
                         @foreach ($ranks as $rank)
-                            <option value="{{ $rank->id }}" {{ $transfer->rank_id == $rank->id ? 'selected' : '' }}>{{ $rank->rank }}</option>
+                            <option value="{{ $rank->id }}" {{ $rank->id == $transfer->rank_id ? 'selected' : '' }}>
+                                {{ $rank->name }}
+                            </option>
                         @endforeach
                     </select>
+                    @error('rank_id')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
-                <div class="form-group">
+
+                <div class="form-group mt-3">
                     <label for="transfer_date">Transfer Date</label>
-                    <input type="date" name="transfer_date" value="{{ $transfer->transfer_date }}" class="form-control" required>
+                    <input type="date" name="transfer_date" class="form-control @error('transfer_date') is-invalid @enderror" value="{{ $transfer->transfer_date }}" required>
+                    @error('transfer_date')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
-                <div class="form-group">
+
+                <div class="form-group mt-3">
                     <label for="status">Status</label>
-                    <input type="text" name="status" value="{{ $transfer->status }}" class="form-control" required>
+                    <input type="text" name="status" class="form-control @error('status') is-invalid @enderror" value="{{ $transfer->status }}" required>
+                    @error('status')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
-                <button type="submit" class="btn btn-primary">Update Transfer</button>
+
+                <button type="submit" class="btn btn-success mt-3">Save Changes</button>
             </form>
         </div>
     </div>

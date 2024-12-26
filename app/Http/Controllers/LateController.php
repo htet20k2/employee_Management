@@ -65,7 +65,6 @@ class LateController extends Controller
     {
         $late = Late::findOrFail($id);
         $late->delete();
-
         return redirect()->route('lates.index')->with('success', 'Late entry deleted successfully.');
     }
 }

@@ -26,7 +26,7 @@ class DutyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'duty' => 'required|unique:duties,duty', // 
+            'duty' => 'required|unique:duties,duty', 
             'status' => 'required|string|max:255',
         ]);
 

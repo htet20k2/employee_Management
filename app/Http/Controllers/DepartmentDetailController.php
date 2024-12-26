@@ -10,10 +10,9 @@ class DepartmentDetailController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->input('search'); // Get search input.
-        $query = DepartmentDetail::query();   // Initialize the query builder.
+        $search = $request->input('search'); 
+        $query = DepartmentDetail::query();  
     
-        // Include relationships in the query and filter with search.
         if (!empty($search)) {
             $query->whereHas('department', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%");
@@ -23,11 +22,9 @@ class DepartmentDetailController extends Controller
             });
         }
     
-        // Fetch data with pagination.
         $departmentDetails = $query->with(['department', 'rank'])
                                  ->paginate(10);
     
-        // Return to the view.
         return view('admin.departmentdetails.index', compact('departmentDetails'));
     }
 

@@ -16,7 +16,6 @@ class TransferController extends Controller
     public function index()
     {
         $transfers = Transfer::with(['employee', 'employee.employeeDetails', 'employee.employeeDetails.branch', 'employee.employeeDetails.department', 'branch', 'department', 'rank'])->paginate(10);
-        // dd($transfers);'
         return view('admin.transfer.index', compact('transfers'));
 
     }

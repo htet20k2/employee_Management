@@ -11,10 +11,10 @@ class BranchDetailController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->input('search'); // Get search input.
-        $query = BranchDetail::query();   // Initialize the query builder.
+        $search = $request->input('search');
+        $query = BranchDetail::query();  
     
-        // Include relationships in the query and filter with search.
+
         if (!empty($search)) {
             $query->whereHas('branch', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%");
@@ -25,11 +25,9 @@ class BranchDetailController extends Controller
 
         }
     
-        // Fetch data with pagination.
         $branchDetails = $query->with(['branch', 'department'])
                                  ->paginate(10);
     
-        // Return to the view.
         return view('admin.branchdetails.index', compact('branchDetails'));
     }
     
@@ -109,13 +107,13 @@ public function destroy(string $id)
     return redirect()->route('branchdetail.index')->with('success', 'branch Detail deleted successfully.');
 }
 
-// In your BranchDetailController
+
 public function getDepartments(Request $request)
 {
     $branchId = $request->input('branch_id');
 
-    // Fetch departments related to the branch
-    $departments = Department::where('branch_id', $branchId)->get(['id', 'name']); // Adjust field names as needed
+
+    $departments = Department::where('branch_id', $branchId)->get(['id', 'name']); 
     return response()->json($departments);
 }
 

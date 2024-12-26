@@ -79,10 +79,8 @@ class EmployeeDetailController extends Controller
     public function store(Request $request)
     {
 
-        // Log the incoming request to check if the data is correct
         Log::info($request->all());
     
-        // Validate the incoming request data
         $validated = $request->validate([
             'employee_id' => 'required|exists:employees,employee_id', 
             'branch_id' => 'required|exists:branches,id', 
@@ -95,17 +93,14 @@ class EmployeeDetailController extends Controller
             'isTraining' => 'required|boolean',
         ]);
     
-        // Debugging step to log validated data
         Log::info('Validated data: ', $validated);
 
     
 
         try {
 
-            // Create the new EmployeeDetail entry
             $employeeDetail = new EmployeeDetail();
     
-            // Set attributes from validated data
             $employeeDetail->employee_id = $validated['employee_id'];
             $employeeDetail->branch_id = $validated['branch_id'];
             $employeeDetail->department_id = $validated['department_id'];
@@ -116,8 +111,7 @@ class EmployeeDetailController extends Controller
             $employeeDetail->isTraining = $validated['isTraining'];
 
 
-    
-            // Handle file upload for employee photos
+
             if ($request->hasFile('emp_photos')) {
                 $filename = time() . '.' . $request->emp_photos->extension();
                 $request->emp_photos->move(public_path('images/employees'), $filename);
@@ -132,14 +126,9 @@ class EmployeeDetailController extends Controller
                 dd($e);
             }
 
-            // Save the employee detail
-
-    
-            // Redirect with success message
             return redirect()->route('employeedetail.index')->with('success', 'Employee added successfully!');
         } catch (\Exception $e) {
             dd($e);
-            // Log the error and return with an error message
             Log::error('Error creating employee: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while creating the employee.');
         }

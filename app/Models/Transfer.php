@@ -20,19 +20,19 @@ class Transfer extends Model
     ];
 
     // Relationship with EmployeeDetail
-    public function employeeDetail()
+    public function employee()
     {
-        return $this->belongsTo(EmployeeDetail::class, 'employee_id', 'employee_id');
+        return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
     }
 
     public function branch()
     {
-        return $this->belongsTo(Branch::class);
+        return $this->belongsTo(Branch::class,'branch_id');
     }
 
     public function department()
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Department::class,'department_id');
     }
 
     public function rank()

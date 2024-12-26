@@ -54,13 +54,7 @@ class ReportController extends Controller
            
                // Initialize variables for departments and ranks
                $departments = collect();
-               $ranks = collect(); // Make sure it's always a collection
-           
-               // Filter departments based on branch_id
-            //    if ($request->filled('branch_id')) {
-            //        $branch = Branch::with('departments')->find($request->branch_id);
-            //        $departments = $branch ? $branch->departments : collect();
-            //    }
+               $ranks = collect(); 
 
             if ($request->filled('branch_id')) {
                 $branch = Branch::with('departments')->find($request->branch_id);

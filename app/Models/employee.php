@@ -46,4 +46,8 @@ class employee extends Model
     {
         return $this->hasMany(Transfer::class, 'employee_id');
     }
+    public function employeeDetails()
+    {
+        return $this->hasMany(EmployeeDetail::class, 'employee_id');
+    }
 }

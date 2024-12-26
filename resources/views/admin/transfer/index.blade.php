@@ -41,9 +41,19 @@
                         @foreach ($transfers as $transfer)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $transfer->employeeDetail->employee->name ?? 'N/A' }}</td>
-                            <td>{{ $transfer->fromBranch->name ?? 'N/A' }}</td>
-                            <td>{{ $transfer->fromDepartment->name ?? 'N/A' }}</td>
+                            <td>{{ $transfer->employee->name }}</td>
+                            <td>
+                                @foreach ($transfer->employee->employeeDetails as $employeeDetail)
+                                    {{ $employeeDetail->branch->name }}
+                                    
+                                @endforeach
+                            </td>
+                            <td>
+                                @foreach ($transfer->employee->employeeDetails as $employeeDetail)
+                                    {{ $employeeDetail->department->name }}
+                                    
+                                @endforeach
+                            </td>
                             <td>{{ $transfer->branch->name }}</td>
                             <td>{{ $transfer->department->name }}</td>
                             <td>{{ $transfer->rank->rank }}</td>
@@ -52,6 +62,7 @@
                                 <span class="badge bg-{{ $transfer->status == 'Active' ? 'success' : 'secondary' }}">
                                     {{ $transfer->status }}
                                 </span>
+
                             </td>
                             <td>
                                 <a href="{{ route('transfers.edit', $transfer->id) }}" 

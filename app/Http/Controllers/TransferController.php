@@ -92,30 +92,26 @@ class TransferController extends Controller
 
     public function edit($id, Request $request)
     {
-        $transfer = Transfer::findOrFail($id); // Retrieve the transfer record by ID
+        $transfer = Transfer::findOrFail($id); 
         $branches = Branch::with('departments')->get();
         $employeeDetails = EmployeeDetail::with(['branch', 'department'])->get();
         $departments = collect();
         $ranks = collect();
         $selectedEmployeeDetail = null;
-    
+
+
         if ($request->filled('branch_id')) {
-            $branch = $branches->find($request->branch_id);
+            $branch = $branches->where('id', $request->branch_id)->first();
             $departments = $branch ? $branch->departments : collect();
         }
-    
+
         if ($request->filled('department_id')) {
             $department = Department::with('ranks')->find($request->department_id);
             $ranks = $department ? $department->ranks : collect();
         }
-    
-        if ($request->filled('employee_detail_id')) {
-            $selectedEmployeeDetail = EmployeeDetail::with(['branch', 'department'])
-                ->findOrFail($request->employee_detail_id);
-        }
-    
+
         return view('admin.transfer.edit', compact(
-            'transfer', // Pass the transfer object to the view
+            'transfer',
             'branches',
             'departments',
             'ranks',
@@ -123,37 +119,36 @@ class TransferController extends Controller
             'selectedEmployeeDetail'
         ));
     }
-    
-    
+
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'employee_detail_id' => 'required|exists:employee_details,id',
-            'branch_id' => 'required|exists:branches,id',
-            'department_id' => 'required|exists:departments,id',
-            'rank_id' => 'required|exists:ranks,id',
-            'transfer_date' => 'required|date',
-            'status' => 'required|string|max:255',
-        ]);
-        $employeeDetail = EmployeeDetail::findOrFail($validated['employee_detail_id']);
-
+    
 
         try {
-            Transfer::update([
-                'employee_id' => $validated['employee_detail_id'],
-                'branch_id' => $validated['branch_id'],
-                'department_id' => $validated['department_id'],
-                'rank_id' => $validated['rank_id'],
-                'transfer_date' => $validated['transfer_date'],
-                'status' => $validated['status'],
+            $validated = $request->validate([
+                'employee_id' => 'required|exists:employee_details,employee_id',
+                'branch_id' => 'required|exists:branches,id',
+                'department_id' => 'required|exists:departments,id',
+                'rank_id' => 'required|exists:ranks,id',
+                'transfer_date' => 'required|date',
+                'status' => 'required|string|max:255',
             ]);
+
     
-            return redirect()->route('transfers.index')->with('success', 'Employee transfer history updated successfully.');
+    
+            $transfer = Transfer::findOrFail($id);
+            $transfer->update($validated);
+    
+    
+            return redirect()->route('transfers.index')->with('success', 'Transfer updated successfully.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            Log::error('Error updating transfer: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while updating the transfer.');
         }
     }
+    
+    
     
     public function destroy($id)
     {

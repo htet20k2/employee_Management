@@ -8,16 +8,7 @@ use App\Models\EmployeeDetail;
 
 class Transfer extends Model
 {
-    protected $fillable = [
-        'employee_id', 
-        'branch_id', 
-        'department_id', 
-        'rank_id', 
-        'transfer_date', 
-        'status', 
-        'from_branch_id', 
-        'from_department_id'
-    ];
+    protected $fillable = ['employee_detail_id', 'branch_id', 'department_id', 'rank_id', 'transfer_date', 'status'];
 
     // Relationship with EmployeeDetail
     public function employee()

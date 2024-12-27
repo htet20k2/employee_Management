@@ -129,7 +129,6 @@ class EmployeeDetailController extends Controller
             return redirect()->route('employeedetail.index')->with('success', 'Employee added successfully!');
         } catch (\Exception $e) {
             dd($e);
-            Log::error('Error creating employee: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while creating the employee.');
         }
     }

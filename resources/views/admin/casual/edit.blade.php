@@ -37,10 +37,13 @@
             <label for="count">Count</label>
             <input type="number" name="count" id="count" class="form-control" value="{{ old('count', $casual->count) }}" required>
         </div>
-
-        <div class="form-group">
-            <label for="istraining">Is Training</label>
-            <input type="text" name="istraining" id="istraining" class="form-control" value="{{ old('istraining', $casual->istraining) }}" required>
+        
+        <div class="mb-3">
+            <label for="isTraining" class="form-label">Is Training</label>
+            <select class="form-control" id="isTraining" name="isTraining" required>
+                <option value="0" {{ old('isTraining') == 0 ? 'selected' : '' }}>No</option>
+                <option value="1" {{ old('isTraining') == 1 ? 'selected' : '' }}>Yes</option>
+            </select>
         </div>
 
         <button type="submit" class="btn btn-primary">Update Casual</button>

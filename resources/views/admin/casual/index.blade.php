@@ -29,7 +29,7 @@
                     <td>{{ \Carbon\Carbon::parse($casual->formonth)->format('F Y') }}</td>
                     <td>{{ $casual->foryear }}</td>
                     <td>{{ $casual->count }}</td>
-                    <td>{{ $casual->istraining }}</td>
+                    <td>{{ $casual->isTraining ? 'Yes' : 'No' }}</td>
                     <td>
                         <a href="{{ route('casuals.edit', $casual->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('casuals.destroy', $casual->id) }}" method="POST" style="display:inline-block;">

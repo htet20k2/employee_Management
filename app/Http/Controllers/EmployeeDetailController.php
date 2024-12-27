@@ -79,7 +79,6 @@ class EmployeeDetailController extends Controller
     public function store(Request $request)
     {
 
-        Log::info($request->all());
     
         $validated = $request->validate([
             'employee_id' => 'required|exists:employees,employee_id', 

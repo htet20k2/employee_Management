@@ -58,6 +58,8 @@ Route::prefix('admin')->middleware('auth')->group(function(){
 
     // transfer 
     Route::resource('/transfers',TransferController::class);
+    Route::get('/transfers/{id}/edit', [TransferController::class, 'edit'])->name('transfers.edit');
+
     
     // branchdetail 
     Route::resource('/branchdetail',BranchDetailController::class);

@@ -8,7 +8,7 @@
 
         <div class="card-body">
 
-        <form method="GET" action="{{ route('transfers.edit',$transfers->id ?? '') }}">
+            <form method="GET" action="{{ route('transfers.edit',$transfers->id ?? '') }}">
             <div class="form-group">
                 <label for="employee_detail_id">Employee</label>
                 <select name="employee_detail_id" class="form-control" required onchange="this.form.submit()">
@@ -52,11 +52,9 @@
         </form>
 
 
-            <form method="POST" action="{{ route('transfers.update', $transfers->id) }}">
+        <form method="POST" action="{{ route('transfers.update',$transfer->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-
-
 
                 <input type="hidden" name="employee_detail_id" value="{{ $transfer->employee_detail_id }}">
                 <input type="hidden" name="branch_id" value="{{ $transfer->branch_id }}">

@@ -92,28 +92,30 @@ class TransferController extends Controller
 
     public function edit($id, Request $request)
     {
+        $transfer = Transfer::findOrFail($id); // Retrieve the transfer record by ID
         $branches = Branch::with('departments')->get();
         $employeeDetails = EmployeeDetail::with(['branch', 'department'])->get();
         $departments = collect();
         $ranks = collect();
         $selectedEmployeeDetail = null;
-
+    
         if ($request->filled('branch_id')) {
             $branch = $branches->find($request->branch_id);
             $departments = $branch ? $branch->departments : collect();
         }
-
+    
         if ($request->filled('department_id')) {
             $department = Department::with('ranks')->find($request->department_id);
             $ranks = $department ? $department->ranks : collect();
         }
-
+    
         if ($request->filled('employee_detail_id')) {
             $selectedEmployeeDetail = EmployeeDetail::with(['branch', 'department'])
                 ->findOrFail($request->employee_detail_id);
         }
-
+    
         return view('admin.transfer.edit', compact(
+            'transfer', // Pass the transfer object to the view
             'branches',
             'departments',
             'ranks',
@@ -121,6 +123,7 @@ class TransferController extends Controller
             'selectedEmployeeDetail'
         ));
     }
+    
     
     public function update(Request $request, $id)
     {

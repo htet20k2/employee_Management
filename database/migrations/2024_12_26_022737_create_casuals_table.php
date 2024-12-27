@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('formonth');
             $table->integer('foryear');
             $table->integer('count');
-            $table->String('istraining');
+            $table->boolean('isTraining')->default(false);
             $table->timestamps();
             $table->foreign('employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
         });

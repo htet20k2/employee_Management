@@ -29,7 +29,7 @@ class CasualController extends Controller
             'formonth' => 'required|integer|min:1|max:12',
             'foryear' => 'required|integer|min:1|max:2100',
             'count' => 'required|integer|min:0',
-            'istraining' => 'required|string',
+            'isTraining' => 'required|boolean',
         ]);
     
         Casual::create($request->all());
@@ -59,7 +59,7 @@ class CasualController extends Controller
             'formonth' => 'required|integer|min:1|max:12',
             'foryear' => 'required|integer|min:1|max:2100',
             'count' => 'required|integer|min:0',
-            'istraining' => 'required|string',
+            'isTraining' => 'required|boolean',
         ]);
     
         $casual = Casual::findOrFail($id);
